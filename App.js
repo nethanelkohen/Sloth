@@ -1,11 +1,15 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from "react";
+import { StyleSheet, Image, View, Text } from "react-native";
 
-export default class App extends React.Component {
+export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
+        <Text style={styles.text}>Check the N/W</Text>
+        <Image
+          style={styles.image}
+          source={require("./assets/sloth-logo.png")}
+        />
       </View>
     );
   }
@@ -14,8 +18,17 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center"
   },
+  text: {
+    marginTop: 50,
+    fontSize: 50,
+    fontFamily: "Arial"
+  },
+  image: {
+    flex: 1,
+    width: "100%",
+    resizeMode: "contain"
+  }
 });
