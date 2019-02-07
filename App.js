@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { StyleSheet, Image, View, Text } from "react-native";
+import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 
-export default class App extends Component {
+import TrainStatus from "./components/TrainStatus";
+
+class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Check the N/W</Text>
+        <Text style={styles.text}>SLOTH</Text>
         <Image
           style={styles.image}
           source={require("./assets/sloth-logo.png")}
@@ -14,6 +17,13 @@ export default class App extends Component {
     );
   }
 }
+
+const TabNavigator = createBottomTabNavigator({
+  Home: App,
+  Status: TrainStatus
+});
+
+export default createAppContainer(TabNavigator);
 
 const styles = StyleSheet.create({
   container: {
