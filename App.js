@@ -3,7 +3,10 @@ import { StyleSheet, Image, View, Text } from "react-native";
 import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 
 import TrainStatus from "./components/TrainStatus";
-import ProfilePage from "./components/ProfilePage";
+import Post from "./components/Post";
+import LogIn from "./components/LogIn";
+import SignUp from "./components/SignUp";
+import StationDetails from "./components/StationDetails";
 
 class App extends Component {
   render() {
@@ -22,7 +25,10 @@ class App extends Component {
 const TabNavigator = createBottomTabNavigator({
   Home: App,
   Status: TrainStatus,
-  Profile: ProfilePage
+  Post: Post,
+  SignUp: SignUp,
+  LogIn: LogIn,
+  StationDetails: StationDetails
 });
 
 export default createAppContainer(TabNavigator);

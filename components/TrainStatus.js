@@ -13,6 +13,7 @@ import {
   Text,
   Icon
 } from "native-base";
+import store from "react-native-simple-store";
 
 export default class TrainStatus extends Component {
   state = {
@@ -38,17 +39,29 @@ export default class TrainStatus extends Component {
       nycTime = new Date(nycTime);
 
       function checkStatus(arg) {
-        if (arg == "fast") {
+        if (arg == "smooth") {
           return styles.green;
         } else if (arg == "slow" || "crowded") {
           return styles.red;
         }
       }
 
+      storeData = async station => {
+        store.save("station", {
+          stationChoice: station
+        });
+      };
+
       return (
         <ListItem avatar key={station.id}>
           <Left>
-            <Button transparent>
+            <Button
+              transparent
+              onPress={() => {
+                storeData(station.station);
+                this.props.navigation.navigate("StationDetails");
+              }}
+            >
               <Icon>🚂</Icon>
             </Button>
           </Left>

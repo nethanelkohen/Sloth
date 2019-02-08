@@ -10,10 +10,11 @@ import {
   Button,
   Text,
   Icon,
-  Picker
+  Picker,
+  Body
 } from "native-base";
 
-export default class FormExample extends Component {
+export default class SignUp extends Component {
   state = {
     username: "",
     pasword: "",
@@ -23,6 +24,15 @@ export default class FormExample extends Component {
   };
 
   buttonPress = () => {
+    let { username, home_station } = this.state;
+    if (username.length < 4) {
+      return Alert.alert("Username must be at least 4 characters");
+    }
+
+    if (home_station == undefined) {
+      return Alert.alert("Please choose a home station");
+    }
+
     const url = "http://localhost:3000/user";
 
     fetch(url, {
@@ -33,17 +43,11 @@ export default class FormExample extends Component {
       },
       body: JSON.stringify(this.state)
     })
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(newRes) {
+      .then(response => response.json())
+      .then(newRes => {
         console.log("jhere is new res", newRes);
       })
-      .catch(err => console.log(err));
-  };
-
-  handleChange = event => {
-    this.setState({ username: event.target.value });
+      .catch(err => console.error(err));
   };
 
   setStation = value => {
@@ -89,7 +93,7 @@ export default class FormExample extends Component {
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
                 style={{ width: undefined }}
-                placeholder="Select your station"
+                placeholder="Select your home station"
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.home_station}
@@ -123,9 +127,11 @@ export default class FormExample extends Component {
                 <Picker.Item label="Whenever there's a delay" value="2" />
               </Picker>
             </Item>
-            <Button onPress={this.buttonPress}>
-              <Text>Sign Up!</Text>
-            </Button>
+            <Body>
+              <Button onPress={this.buttonPress} style={{ marginTop: 20 }}>
+                <Text>Sign Up!</Text>
+              </Button>
+            </Body>
           </Form>
         </Content>
       </Container>
