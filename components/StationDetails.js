@@ -1,41 +1,71 @@
 import React, { Component } from "react";
-import { Container, Header, Text, Button } from "native-base";
+import { Container, Header, Text, Button, Body } from "native-base";
 import { View } from "react-native";
 import store from "react-native-simple-store";
 import { NavigationEvents } from "react-navigation";
 
 export default class StationDetails extends Component {
   state = {
-    station: ""
+    station: "",
+    stationData: null
   };
 
   getStore = async () => {
-    console.log("get store ran");
-
     await store
       .get("station")
-      .then(res => {
-        console.log(res);
+      .then(res => this.setState({ station: res.stationChoice }))
+      .catch(err => err);
+  };
 
-        this.setState({ station: res.stationChoice });
+  getStation = async () => {
+    let { station } = this.state;
+
+    const url = `http://localhost:3000/station/${station}`;
+    await fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ stationData: data.message });
       })
       .catch(err => err);
   };
 
-  render() {
-    console.log("state here:::", this.state);
+  renderStationData = () => {
+    let { stationData } = this.state;
 
-    return (
-      <Container>
-        <NavigationEvents onDidFocus={() => this.getStore()} />
-        <Header>
-          <Text> Station Details: {this.state.station} </Text>
-        </Header>
-        <View
+    if (stationData !== null) {
+      return (
+        <Container
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <Text>Details Screen</Text>
-        </View>
+          <Text>{stationData.station}</Text>
+          {stationData.status == null ? (
+            <Body>
+              <Text>No update.</Text>
+              <Button onPress={() => this.props.navigation.navigate("Post")}>
+                <Text>Make an update</Text>
+              </Button>
+            </Body>
+          ) : (
+            <Text>Status Update: {stationData.status}</Text>
+          )}
+        </Container>
+      );
+    } else return null;
+  };
+
+  render() {
+    return (
+      <Container>
+        <NavigationEvents
+          onDidFocus={() => {
+            this.getStore();
+            this.getStation();
+          }}
+        />
+        <Header>
+          <Text> Station: {this.state.station} </Text>
+        </Header>
+        {this.renderStationData()}
       </Container>
     );
   }

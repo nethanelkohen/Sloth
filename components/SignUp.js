@@ -45,7 +45,7 @@ export default class SignUp extends Component {
     })
       .then(response => response.json())
       .then(newRes => {
-        console.log("jhere is new res", newRes);
+        // console.log("jhere is new res", newRes);
       })
       .catch(err => console.error(err));
   };

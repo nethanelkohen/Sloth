@@ -37,7 +37,7 @@ export default class SignUp extends Component {
     })
       .then(response => response.json())
       .then(newRes => {
-        console.log("jhere is new res", newRes);
+        // console.log("jhere is new res", newRes);
       })
       .catch(err => console.error(err));
   };
@@ -105,6 +105,8 @@ export default class SignUp extends Component {
                 <Picker.Item label="not running" value="not running" />
                 <Picker.Item label="delayed" value="delayed" />
                 <Picker.Item label="smooth" value="smooth" />
+                <Picker.Item label="crowded" value="crowded" />
+                <Picker.Item label="slow" value="slow" />
               </Picker>
             </Item>
             <Item>

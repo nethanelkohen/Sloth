@@ -14,13 +14,14 @@ import {
   Icon
 } from "native-base";
 import store from "react-native-simple-store";
+import { NavigationEvents } from "react-navigation";
 
 export default class TrainStatus extends Component {
   state = {
     stations: []
   };
 
-  componentDidMount = () => {
+  getUpdates = () => {
     const url = "http://localhost:3000/station/all";
     fetch(url)
       .then(res => res.json())
@@ -39,11 +40,13 @@ export default class TrainStatus extends Component {
       nycTime = new Date(nycTime);
 
       function checkStatus(arg) {
-        if (arg == "smooth") {
-          return styles.green;
-        } else if (arg == "slow" || "crowded") {
-          return styles.red;
-        }
+        if (typeof arg == "object") return;
+
+        if (arg.includes("smooth") == 1) return styles.green;
+        else if (arg.includes("not running") == 1) return styles.red;
+        else if (arg.includes("slow") == 1) return styles.yellow;
+        else if (arg.includes("crowded") == 1) return styles.yellow;
+        else return styles.black;
       }
 
       storeData = async station => {
@@ -54,7 +57,7 @@ export default class TrainStatus extends Component {
 
       return (
         <ListItem avatar key={station.id}>
-          <Left>
+          {/* <Left>
             <Button
               transparent
               onPress={() => {
@@ -64,9 +67,19 @@ export default class TrainStatus extends Component {
             >
               <Icon>🚂</Icon>
             </Button>
-          </Left>
+          </Left> */}
           <Body>
-            <Text style={{ fontSize: 22 }}>{station.station}</Text>
+            <Button
+              transparent
+              onPress={() => {
+                storeData(station.station);
+                this.props.navigation.navigate("StationDetails");
+              }}
+            >
+              <Text style={{ fontSize: 26, color: "black" }}>
+                {station.station}
+              </Text>
+            </Button>
             <Text style={{ fontSize: 14 }} note>
               last updated: {nycTime.toLocaleString()}
             </Text>
@@ -86,6 +99,7 @@ export default class TrainStatus extends Component {
   render() {
     return (
       <Container>
+        <NavigationEvents onDidFocus={() => this.getUpdates()} />
         <Header />
         <Content>
           <List>{this.renderStations()}</List>
@@ -102,6 +116,14 @@ const styles = StyleSheet.create({
   },
   red: {
     color: "#ff0000",
+    fontSize: 20
+  },
+  yellow: {
+    color: "#d3c200",
+    fontSize: 20
+  },
+  black: {
+    color: "#000000",
     fontSize: 20
   }
 });
