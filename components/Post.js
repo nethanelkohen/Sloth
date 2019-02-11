@@ -21,7 +21,8 @@ export default class SignUp extends Component {
     status_update: undefined,
     comments: null,
     photo: undefined,
-    vetting_score: 0
+    vetting_score: 0,
+    updateConfirm: null
   };
 
   buttonPress = () => {
@@ -36,10 +37,25 @@ export default class SignUp extends Component {
       body: JSON.stringify(this.state)
     })
       .then(response => response.json())
-      .then(newRes => {
-        // console.log("jhere is new res", newRes);
-      })
+      .then(newRes => this.setState({ updateConfirm: newRes }))
       .catch(err => console.error(err));
+  };
+
+  renderPost = () => {
+    const { updateConfirm } = this.state;
+    if (updateConfirm) {
+      return (
+        <Body>
+          <Text style={{ marginTop: 100, fontSize: 30 }}>
+            Station updated: {updateConfirm.station}
+          </Text>
+          <Text style={{ fontSize: 30 }}>
+            New status: {updateConfirm.status_update}
+          </Text>
+          <Text style={{ fontSize: 30 }}>Train: {updateConfirm.train}</Text>
+        </Body>
+      );
+    } else return null;
   };
 
   render() {
@@ -55,7 +71,6 @@ export default class SignUp extends Component {
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
                 placeholder="Which station would you like to update?"
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
@@ -78,7 +93,6 @@ export default class SignUp extends Component {
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
                 placeholder="Which train?"
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
@@ -93,7 +107,6 @@ export default class SignUp extends Component {
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
                 placeholder="What is the status update?"
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
@@ -122,6 +135,7 @@ export default class SignUp extends Component {
               </Button>
             </Body>
           </Form>
+          {this.renderPost()}
         </Content>
       </Container>
     );

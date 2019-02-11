@@ -21,13 +21,23 @@ export default class TrainStatus extends Component {
     stations: []
   };
 
+  componentDidMount() {
+    // this.checkUser();
+  }
+
   getUpdates = () => {
     const url = "http://localhost:3000/station/all";
     fetch(url)
       .then(res => res.json())
-      .then(stations => {
-        this.setState({ stations: stations.message });
-      });
+      .then(stations => this.setState({ stations: stations.message }));
+  };
+
+  checkUser = async store => {
+    store.get("user").then(res => {
+      if (res == undefined) console.log("res is undefined");
+
+      console.log("user res", res);
+    });
   };
 
   renderStations = () => {
@@ -37,7 +47,6 @@ export default class TrainStatus extends Component {
       let nycTime = new Date(station.updatedAt).toLocaleString("en-US", {
         timeZone: "America/New_York"
       });
-      nycTime = new Date(nycTime);
 
       function checkStatus(arg) {
         if (typeof arg == "object") return;
@@ -50,24 +59,11 @@ export default class TrainStatus extends Component {
       }
 
       storeData = async station => {
-        store.save("station", {
-          stationChoice: station
-        });
+        store.save("station", { stationChoice: station });
       };
 
       return (
         <ListItem avatar key={station.id}>
-          {/* <Left>
-            <Button
-              transparent
-              onPress={() => {
-                storeData(station.station);
-                this.props.navigation.navigate("StationDetails");
-              }}
-            >
-              <Icon>🚂</Icon>
-            </Button>
-          </Left> */}
           <Body>
             <Button
               transparent
@@ -80,7 +76,7 @@ export default class TrainStatus extends Component {
                 {station.station}
               </Text>
             </Button>
-            <Text style={{ fontSize: 14 }} note>
+            <Text style={{ fontSize: 16 }} note>
               last updated: {nycTime.toLocaleString()}
             </Text>
           </Body>
@@ -100,7 +96,9 @@ export default class TrainStatus extends Component {
     return (
       <Container>
         <NavigationEvents onDidFocus={() => this.getUpdates()} />
-        <Header />
+        <Header>
+          <Text style={{ fontSize: 30 }}>S L O T H</Text>
+        </Header>
         <Content>
           <List>{this.renderStations()}</List>
         </Content>
@@ -112,19 +110,19 @@ export default class TrainStatus extends Component {
 const styles = StyleSheet.create({
   green: {
     color: "#0acc0a",
-    fontSize: 20
+    fontSize: 22
   },
   red: {
     color: "#ff0000",
-    fontSize: 20
+    fontSize: 22
   },
   yellow: {
     color: "#d3c200",
-    fontSize: 20
+    fontSize: 22
   },
   black: {
     color: "#000000",
-    fontSize: 20
+    fontSize: 22
   }
 });
 

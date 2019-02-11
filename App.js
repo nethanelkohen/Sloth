@@ -7,7 +7,10 @@ import Post from "./components/Post";
 import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
 import StationDetails from "./components/StationDetails";
+import Profile from "./components/Profile";
 
+// HIGHLIGHT USER'S HOME STATION
+// ADD VETTING FUNC
 class App extends Component {
   render() {
     return (
@@ -23,12 +26,13 @@ class App extends Component {
 }
 
 const TabNavigator = createBottomTabNavigator({
-  Home: App,
+  // Home: App,
   Status: TrainStatus,
   Post: Post,
   SignUp: SignUp,
   LogIn: LogIn,
-  StationDetails: StationDetails
+  StationDetails: StationDetails,
+  Profile: Profile
 });
 
 export default createAppContainer(TabNavigator);

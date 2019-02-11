@@ -50,17 +50,9 @@ export default class SignUp extends Component {
       .catch(err => console.error(err));
   };
 
-  setStation = value => {
-    this.setState({
-      home_station: value
-    });
-  };
+  setStation = value => this.setState({ home_station: value });
 
-  setNotifications = value => {
-    this.setState({
-      notifications_setting: value
-    });
-  };
+  setNotifications = value => this.setState({ notifications_setting: value });
 
   render() {
     return (
@@ -92,7 +84,6 @@ export default class SignUp extends Component {
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
                 placeholder="Select your home station"
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
@@ -115,7 +106,6 @@ export default class SignUp extends Component {
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
                 placeholder="Select your notifications settings (default: none)"
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"

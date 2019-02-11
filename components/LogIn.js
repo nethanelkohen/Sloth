@@ -13,6 +13,7 @@ import {
   Picker,
   Body
 } from "native-base";
+import store from "react-native-simple-store";
 
 export default class LogIn extends Component {
   state = {
@@ -20,28 +21,26 @@ export default class LogIn extends Component {
     pasword: ""
   };
 
-  //   buttonPress = () => {
-  //     let { username } = this.state;
-  //     if (username.length < 4) {
-  //       return Alert.alert("Username must be at least 4 characters");
-  //     }
+  buttonPress = () => {
+    let { username } = this.state;
+    if (username.length < 4) {
+      return Alert.alert("Username must be at least 4 characters");
+    }
 
-  //     const url = "http://localhost:3000/user";
+    const url = "http://localhost:3000/auth/login";
 
-  //     fetch(url, {
-  //       method: "post",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json"
-  //       },
-  //       body: JSON.stringify(this.state)
-  //     })
-  //       .then(response => response.json())
-  //       .then(newRes => {
-  //         console.log("jhere is new res", newRes);
-  //       })
-  //       .catch(err => console.error(err));
-  //   };
+    fetch(url, {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(this.state)
+    })
+      .then(response => response.json())
+      .then(userRes => store.save("token", { token: userRes.token }))
+      .catch(err => console.error(err));
+  };
 
   render() {
     return (
