@@ -9,11 +9,10 @@ import {
   Input,
   Button,
   Text,
-  Icon,
-  Picker,
   Body
 } from "native-base";
 import store from "react-native-simple-store";
+import fetchData from "../utils/fetchData";
 
 export default class LogIn extends Component {
   state = {
@@ -21,25 +20,13 @@ export default class LogIn extends Component {
     pasword: ""
   };
 
-  buttonPress = () => {
-    let { username } = this.state;
+  buttonPress = returnedData => {
+    const { username } = this.state;
     if (username.length < 4) {
       return Alert.alert("Username must be at least 4 characters");
     }
 
-    const url = "http://localhost:3000/auth/login";
-
-    fetch(url, {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(this.state)
-    })
-      .then(response => response.json())
-      .then(userRes => store.save("token", { token: userRes.token }))
-      .catch(err => console.error(err));
+    returnedData.then(userRes => store.save("token", { token: userRes.token }));
   };
 
   render() {
@@ -69,7 +56,22 @@ export default class LogIn extends Component {
             </Item>
 
             <Body>
-              <Button onPress={this.buttonPress} style={{ marginTop: 20 }}>
+              <Button
+                onPress={() =>
+                  this.buttonPress(
+                    fetchData(
+                      "auth/login",
+                      "post",
+                      {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                      },
+                      JSON.stringify(this.state)
+                    )
+                  )
+                }
+                style={{ marginTop: 20 }}
+              >
                 <Text>Log In!</Text>
               </Button>
             </Body>

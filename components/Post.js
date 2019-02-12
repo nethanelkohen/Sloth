@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Alert } from "react-native";
 import {
   Container,
   Header,
@@ -13,6 +12,8 @@ import {
   Picker,
   Body
 } from "native-base";
+import fetchData from "../utils/fetchData";
+import RenderPost from "../functional/RenderPost";
 
 export default class SignUp extends Component {
   state = {
@@ -25,41 +26,19 @@ export default class SignUp extends Component {
     updateConfirm: null
   };
 
-  buttonPress = () => {
-    const url = "http://localhost:3000/post";
-
-    fetch(url, {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(this.state)
-    })
-      .then(response => response.json())
-      .then(newRes => this.setState({ updateConfirm: newRes }))
-      .catch(err => console.error(err));
-  };
-
-  renderPost = () => {
-    const { updateConfirm } = this.state;
-    if (updateConfirm) {
-      return (
-        <Body>
-          <Text style={{ marginTop: 100, fontSize: 30 }}>
-            Station updated: {updateConfirm.station}
-          </Text>
-          <Text style={{ fontSize: 30 }}>
-            New status: {updateConfirm.status_update}
-          </Text>
-          <Text style={{ fontSize: 30 }}>Train: {updateConfirm.train}</Text>
-        </Body>
-      );
-    } else return null;
+  buttonPress = returnedData => {
+    returnedData.then(newRes => this.setState({ updateConfirm: newRes }));
   };
 
   render() {
-    let { station, status_update, train, comments } = this.state;
+    const {
+      station,
+      status_update,
+      train,
+      comments,
+      updateConfirm
+    } = this.state;
+
     return (
       <Container>
         <Header>
@@ -130,12 +109,27 @@ export default class SignUp extends Component {
               />
             </Item>
             <Body>
-              <Button onPress={this.buttonPress} style={{ marginTop: 20 }}>
+              <Button
+                onPress={() =>
+                  this.buttonPress(
+                    fetchData(
+                      "post",
+                      "post",
+                      {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                      },
+                      JSON.stringify(this.state)
+                    )
+                  )
+                }
+                style={{ marginTop: 20 }}
+              >
                 <Text>Update!</Text>
               </Button>
             </Body>
           </Form>
-          {this.renderPost()}
+          <RenderPost props={updateConfirm} />
         </Content>
       </Container>
     );

@@ -13,6 +13,7 @@ import {
   Picker,
   Body
 } from "native-base";
+import fetchData from "../utils/fetchData";
 
 export default class SignUp extends Component {
   state = {
@@ -23,7 +24,7 @@ export default class SignUp extends Component {
     notifications_setting: 0
   };
 
-  buttonPress = () => {
+  buttonPress = arg => {
     let { username, home_station } = this.state;
     if (username.length < 4) {
       return Alert.alert("Username must be at least 4 characters");
@@ -33,20 +34,8 @@ export default class SignUp extends Component {
       return Alert.alert("Please choose a home station");
     }
 
-    const url = "http://localhost:3000/user";
-
-    fetch(url, {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(this.state)
-    })
-      .then(response => response.json())
-      .then(newRes => {
-        // console.log("jhere is new res", newRes);
-      })
+    arg
+      .then(newRes => console.log("jhere is new res", newRes))
       .catch(err => console.error(err));
   };
 
@@ -118,7 +107,22 @@ export default class SignUp extends Component {
               </Picker>
             </Item>
             <Body>
-              <Button onPress={this.buttonPress} style={{ marginTop: 20 }}>
+              <Button
+                onPress={() =>
+                  this.buttonPress(
+                    fetchData(
+                      "user",
+                      "post",
+                      {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                      },
+                      JSON.stringify(this.state)
+                    )
+                  )
+                }
+                style={{ marginTop: 20 }}
+              >
                 <Text>Sign Up!</Text>
               </Button>
             </Body>

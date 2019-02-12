@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Container, Header, Text, Button, Body } from "native-base";
-import { View } from "react-native";
+import { Container, Header, List, Text, Content } from "native-base";
 import store from "react-native-simple-store";
 import { NavigationEvents } from "react-navigation";
+import StatusUpdate from "../functional/StatusUpdate";
+import PostData from "../functional/PostData";
+import fetchData from "../utils/fetchData";
 
 export default class StationDetails extends Component {
   state = {
@@ -19,139 +21,49 @@ export default class StationDetails extends Component {
       .then(res => this.setState({ station: res.stationChoice }))
       .catch(err => err);
 
-    this.getStation();
-    this.getLastPost();
-  };
+    fetchData(`station/${this.state.station}`, "get").then(data =>
+      this.setState({ stationData: data.message })
+    );
 
-  getStation = async () => {
-    let { station } = this.state;
-
-    const url = `http://localhost:3000/station/${station}`;
-    await fetch(url)
-      .then(res => res.json())
-      .then(data => this.setState({ stationData: data.message }))
-      .catch(err => err);
-  };
-
-  getLastPost = async () => {
-    let { station } = this.state;
-
-    const url = `http://localhost:3000/post/one/${station}`;
-    await fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ postData: data.message });
-        // this.setState({ score: data.mes });
-        data.message.map(post => {
-          this.setState({ score: post.vetting_score, postId: post.id });
-        });
-      })
-      .catch(err => err);
-  };
-
-  renderStationData = () => {
-    let { stationData } = this.state;
-
-    if (stationData !== null) {
-      return (
-        <Container
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <Text>{stationData.station}</Text>
-          {stationData.status == null ? (
-            <Body>
-              <Text>No update.</Text>
-              <Button onPress={() => this.props.navigation.navigate("Post")}>
-                <Text>Make an update</Text>
-              </Button>
-            </Body>
-          ) : (
-            <Text>Status Update: {stationData.status}</Text>
-          )}
-        </Container>
-      );
-    } else return null;
-  };
-
-  incrementScore = () => {
-    const { clicked } = this.state;
-
-    this.setState(prevState => {
-      return {
-        score: prevState.score + 1,
-        clicked: true
-      };
+    fetchData(`post/all/${this.state.station}`, "get").then(data => {
+      this.setState({ postData: data.message });
+      data.message.map(post => {
+        this.setState({ score: post.vetting_score, postId: post.id });
+      });
     });
-    this.updateScore("increment");
   };
 
-  decrementScore = () => {
-    const { clicked } = this.state;
-
-    this.setState(prevState => {
-      return {
-        score: prevState.score - 1,
-        clicked: true
-      };
-    });
-    this.updateScore("decrement");
+  counter = arg => {
+    if (arg === "increment") {
+      this.setState(prevState => {
+        return {
+          score: prevState.score + 1,
+          clicked: true
+        };
+      });
+      this.updateScore("increment");
+    } else if (arg === "decrement") {
+      this.setState(prevState => {
+        return {
+          score: prevState.score - 1,
+          clicked: true
+        };
+      });
+      this.updateScore("decrement");
+    }
   };
 
   updateScore = async arg => {
-    let { postId } = this.state;
+    const { postId } = this.state;
 
-    const url = `http://localhost:3000/post/${arg}/${postId}`;
-
-    await fetch(url, {
-      method: "put",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(err => console.error(err));
-  };
-
-  renderPostData = () => {
-    let { postData, score } = this.state;
-
-    if (postData !== null) {
-      return postData.map(post => {
-        let nycTime = new Date(post.updatedAt).toLocaleString("en-US", {
-          timeZone: "America/New_York"
-        });
-        return (
-          <Container
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-            key={post.id}
-          >
-            <Text>
-              Latest Post made at {nycTime} for {post.station}
-            </Text>
-            <Text>Comments:{post.comments ? post.comments : null}</Text>
-            <Text>
-              {post.status_updated} for {post.train}
-            </Text>
-            <Text>Validity Score: {score}</Text>
-            <Button onPress={this.incrementScore}>
-              <Text>⬆️</Text>
-            </Button>
-            <Button onPress={this.decrementScore}>
-              <Text>⬇️</Text>
-            </Button>
-          </Container>
-        );
-      });
-    } else return null;
+    fetchData(`post/${arg}/${postId}`, "put", {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    });
   };
 
   render() {
-    let { station, clicked } = this.state;
-    console.log(clicked);
+    let { station, stationData } = this.state;
 
     return (
       <Container>
@@ -159,8 +71,13 @@ export default class StationDetails extends Component {
         <Header>
           <Text> Station: {station} </Text>
         </Header>
-        {this.renderStationData()}
-        {this.renderPostData()}
+        <Content>
+          <StatusUpdate props={stationData} />
+          <Text style={{ fontSize: 20 }}>Last 5 posts</Text>
+          <List>
+            <PostData {...this.state} counter={this.counter} />
+          </List>
+        </Content>
       </Container>
     );
   }
