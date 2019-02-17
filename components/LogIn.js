@@ -26,7 +26,10 @@ export default class LogIn extends Component {
       return Alert.alert("Username must be at least 4 characters");
     }
 
-    returnedData.then(userRes => store.save("token", { token: userRes.token }));
+    returnedData.then(userRes => {
+      store.save("homeStation", { homeStation: userRes.userInfo.home_station });
+      store.save("token", { token: userRes.token });
+    });
   };
 
   render() {

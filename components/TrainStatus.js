@@ -7,13 +7,17 @@ import RenderStations from "../functional/RenderStations";
 
 export default class TrainStatus extends Component {
   state = {
-    stations: []
+    stations: [],
+    homeStation: ""
   };
 
   getUpdates = () => {
-    fetchData("station/all", "get").then(stations =>
-      this.setState({ stations: stations.message })
-    );
+    fetchData("station/all", "get").then(stations => {
+      this.setState({ stations: stations.message });
+    });
+    store
+      .get("homeStation")
+      .then(res => this.setState({ homeStation: res.homeStation }));
   };
 
   // checkUser = async store => {
@@ -32,7 +36,8 @@ export default class TrainStatus extends Component {
   };
 
   render() {
-    const { stations } = this.state;
+    const { stations, homeStation } = this.state;
+
     return (
       <Container>
         <NavigationEvents onDidFocus={() => this.getUpdates()} />
@@ -41,7 +46,12 @@ export default class TrainStatus extends Component {
         </Header>
         <Content>
           <List>
-            <RenderStations props={stations} handlePress={this.handlePress} />
+            <RenderStations
+              // homeStation={homeStation}
+              // stations={stations}
+              {...this.state}
+              handlePress={this.handlePress}
+            />
           </List>
         </Content>
       </Container>
