@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Body, Button, Text } from "native-base";
 
-const RenderPost = ({ props }) => {
+export default ({ props }) => {
   if (!props) {
     return null;
   }
@@ -17,5 +17,3 @@ const RenderPost = ({ props }) => {
     </Body>
   );
 };
-
-export default RenderPost;

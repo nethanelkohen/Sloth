@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, Body, Button } from "native-base";
 
-const RenderHome = ({ props }) => {
+export default ({ props }) => {
   if (props) {
     return (
       <Body>
@@ -11,5 +11,3 @@ const RenderHome = ({ props }) => {
     );
   } else return null;
 };
-
-export default RenderHome;

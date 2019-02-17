@@ -20,13 +20,21 @@ export default class LogIn extends Component {
     pasword: ""
   };
 
-  buttonPress = returnedData => {
+  buttonPress = () => {
     const { username } = this.state;
     if (username.length < 4) {
       return Alert.alert("Username must be at least 4 characters");
     }
 
-    returnedData.then(userRes => {
+    fetchData(
+      "auth/login",
+      "post",
+      {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      JSON.stringify(this.state)
+    ).then(userRes => {
       store.save("homeStation", { homeStation: userRes.userInfo.home_station });
       store.save("token", { token: userRes.token });
     });
@@ -60,19 +68,7 @@ export default class LogIn extends Component {
 
             <Body>
               <Button
-                onPress={() =>
-                  this.buttonPress(
-                    fetchData(
-                      "auth/login",
-                      "post",
-                      {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                      },
-                      JSON.stringify(this.state)
-                    )
-                  )
-                }
+                onPress={() => this.buttonPress()}
                 style={{ marginTop: 20 }}
               >
                 <Text>Log In!</Text>

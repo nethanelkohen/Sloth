@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Body, Button, Text } from "native-base";
 
-const StatusUpdate = ({ props }) => {
+export default ({ props }) => {
   return (
     <View>
       {props ? (
@@ -23,5 +23,3 @@ const StatusUpdate = ({ props }) => {
     </View>
   );
 };
-
-export default StatusUpdate;

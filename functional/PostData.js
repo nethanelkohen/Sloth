@@ -2,7 +2,7 @@ import React from "react";
 import checkStatus from "../utils/checkStatus";
 import { ListItem, Text, Body, Button } from "native-base";
 
-const StatusUpdate = ({ postData, score, counter }) => {
+export default ({ postData, score, counter }) => {
   if (!postData) return null;
   else {
     return postData.map(post => {
@@ -36,5 +36,3 @@ const StatusUpdate = ({ postData, score, counter }) => {
     });
   }
 };
-
-export default StatusUpdate;
