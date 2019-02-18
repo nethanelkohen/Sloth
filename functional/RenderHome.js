@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Body, Button } from "native-base";
+import { Text, Body } from "native-base";
 
 export default ({ props }) => {
   if (props) {

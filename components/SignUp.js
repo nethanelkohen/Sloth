@@ -24,7 +24,7 @@ export default class SignUp extends Component {
     notifications_setting: 0
   };
 
-  buttonPress = () => {
+  buttonPress = arg => {
     let { username, home_station } = this.state;
     if (username.length < 4) {
       return Alert.alert("Username must be at least 4 characters");
@@ -34,15 +34,7 @@ export default class SignUp extends Component {
       return Alert.alert("Please choose a home station");
     }
 
-    fetchData(
-      "user",
-      "post",
-      {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      JSON.stringify(this.state)
-    )
+    arg
       .then(newRes => console.log("jhere is new res", newRes))
       .catch(err => console.error(err));
   };
@@ -116,7 +108,19 @@ export default class SignUp extends Component {
             </Item>
             <Body>
               <Button
-                onPress={() => this.buttonPress()}
+                onPress={() =>
+                  this.buttonPress(
+                    fetchData(
+                      "user",
+                      "post",
+                      {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                      },
+                      JSON.stringify(this.state)
+                    )
+                  )
+                }
                 style={{ marginTop: 20 }}
               >
                 <Text>Sign Up!</Text>

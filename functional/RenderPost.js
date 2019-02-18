@@ -1,6 +1,5 @@
 import React from "react";
-import { View } from "react-native";
-import { Body, Button, Text } from "native-base";
+import { Body, Text } from "native-base";
 
 export default ({ props }) => {
   if (!props) {

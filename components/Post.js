@@ -26,16 +26,8 @@ export default class SignUp extends Component {
     updateConfirm: null
   };
 
-  buttonPress = () => {
-    fetchData(
-      "post",
-      "post",
-      {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      JSON.stringify(this.state)
-    ).then(newRes => this.setState({ updateConfirm: newRes }));
+  buttonPress = returnedData => {
+    returnedData.then(newRes => this.setState({ updateConfirm: newRes }));
   };
 
   render() {
@@ -118,7 +110,19 @@ export default class SignUp extends Component {
             </Item>
             <Body>
               <Button
-                onPress={() => this.buttonPress()}
+                onPress={() =>
+                  this.buttonPress(
+                    fetchData(
+                      "post",
+                      "post",
+                      {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                      },
+                      JSON.stringify(this.state)
+                    )
+                  )
+                }
                 style={{ marginTop: 20 }}
               >
                 <Text>Update!</Text>
