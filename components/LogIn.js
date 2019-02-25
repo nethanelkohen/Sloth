@@ -37,6 +37,7 @@ export default class LogIn extends Component {
     ).then(userRes => {
       store.save("homeStation", { homeStation: userRes.userInfo.home_station });
       store.save("token", { token: userRes.token });
+      store.save("userId", { userId: userRes.user });
     });
   };
 

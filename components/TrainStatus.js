@@ -4,6 +4,7 @@ import { NavigationEvents } from "react-navigation";
 import store from "react-native-simple-store";
 import fetchData from "../utils/fetchData";
 import RenderStations from "../functional/RenderStations";
+import styles from "../styles/styles";
 
 export default class TrainStatus extends Component {
   state = {
@@ -15,9 +16,11 @@ export default class TrainStatus extends Component {
     fetchData("station/all", "get").then(stations => {
       this.setState({ stations: stations.message });
     });
-    store
-      .get("homeStation")
-      .then(res => this.setState({ homeStation: res.homeStation }));
+
+    store.get("homeStation").then(res => {
+      if (res === null) return;
+      this.setState({ homeStation: res.homeStation });
+    });
   };
 
   // checkUser = async store => {
@@ -39,7 +42,7 @@ export default class TrainStatus extends Component {
     const { stations, homeStation } = this.state;
 
     return (
-      <Container>
+      <Container style={styles.container}>
         <NavigationEvents onDidFocus={() => this.getUpdates()} />
         <Header>
           <Text style={{ fontSize: 30 }}>S L O T H</Text>

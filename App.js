@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, Image, View, Text } from "react-native";
+import { StyleSheet, Image, View } from "react-native";
+import { Icon, Text } from "native-base";
 import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 
 import TrainStatus from "./components/TrainStatus";
@@ -9,7 +10,6 @@ import SignUp from "./components/SignUp";
 import StationDetails from "./components/StationDetails";
 import Profile from "./components/Profile";
 
-// HIGHLIGHT USER'S HOME STATION
 // ADD VETTING FUNC
 class App extends Component {
   render() {
@@ -27,12 +27,72 @@ class App extends Component {
 
 const TabNavigator = createBottomTabNavigator({
   // Home: App,
-  Status: TrainStatus,
-  Post: Post,
-  SignUp: SignUp,
-  LogIn: LogIn,
-  StationDetails: StationDetails,
-  Profile: Profile
+
+  Status: {
+    screen: TrainStatus,
+
+    navigationOptions: {
+      tabBarLabel: "Status",
+      tabBarOptions: {
+        showIcon: true
+      },
+      tabBarIcon: () => <Icon name="train" size={25} color="#900" />
+    }
+  },
+  Post: {
+    screen: Post,
+
+    navigationOptions: {
+      tabBarLabel: "Post",
+      tabBarOptions: {
+        showIcon: true
+      },
+      tabBarIcon: () => <Icon name="add" size={25} color="#900" />
+    }
+  },
+  SignUp: {
+    screen: SignUp,
+
+    navigationOptions: {
+      tabBarLabel: "Sign Up",
+      tabBarOptions: {
+        showIcon: true
+      },
+      tabBarIcon: () => <Icon name="person-add" size={25} color="#900" />
+    }
+  },
+  LogIn: {
+    screen: LogIn,
+
+    navigationOptions: {
+      tabBarLabel: "Log In",
+      tabBarOptions: {
+        showIcon: true
+      },
+      tabBarIcon: () => <Icon name="person" size={25} color="#900" />
+    }
+  },
+  StationDetails: {
+    screen: StationDetails,
+
+    navigationOptions: {
+      tabBarLabel: "Station Details",
+      tabBarOptions: {
+        showIcon: true
+      },
+      tabBarIcon: () => <Icon name="subway" size={25} color="#900" />
+    }
+  },
+  Profile: {
+    screen: Profile,
+    navigationOptions: {
+      tabBarLabel: "Profile",
+      tabBarOptions: {
+        showIcon: true
+      },
+      tabBarIcon: () => <Icon name="contact" size={25} color="#900" />
+    }
+  }
 });
 
 export default createAppContainer(TabNavigator);
