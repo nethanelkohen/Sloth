@@ -14,6 +14,7 @@ import {
 } from "native-base";
 import fetchData from "../utils/fetchData";
 import RenderPost from "../functional/RenderPost";
+import styles from "../styles/styles";
 
 export default class SignUp extends Component {
   state = {
@@ -40,7 +41,7 @@ export default class SignUp extends Component {
     } = this.state;
 
     return (
-      <Container>
+      <Container style={styles.container}>
         <Header>
           <Text>What's going on?</Text>
         </Header>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import {
   Container,
   Header,
@@ -8,16 +8,21 @@ import {
   Item,
   Input,
   Button,
+  Label,
   Text,
-  Body
+  Body,
+  Card,
+  CardItem
 } from "native-base";
 import store from "react-native-simple-store";
 import fetchData from "../utils/fetchData";
+import globalStyles from "../styles/styles";
 
 export default class LogIn extends Component {
   state = {
     username: "",
-    pasword: ""
+    pasword: "",
+    backEndRes: null
   };
 
   buttonPress = () => {
@@ -35,6 +40,8 @@ export default class LogIn extends Component {
       },
       JSON.stringify(this.state)
     ).then(userRes => {
+      this.setState({ backEndRes: userRes.message });
+
       store.save("homeStation", { homeStation: userRes.userInfo.home_station });
       store.save("token", { token: userRes.token });
       store.save("userId", { userId: userRes.user });
@@ -42,31 +49,31 @@ export default class LogIn extends Component {
   };
 
   render() {
+    const { backEndRes } = this.state;
     return (
-      <Container>
+      <Container style={globalStyles.container} padder>
         <Header>
           <Text>Log In</Text>
         </Header>
-        <Content>
+        <Content style={{ marginTop: "2%" }}>
           <Form>
-            <Item>
+            <Item floatingLabel>
+              <Label>Username</Label>
               <Input
-                placeholder="Username"
                 value={this.state.username}
                 onChangeText={username => this.setState({ username })}
                 autoCapitalize="none"
               />
             </Item>
-            <Item>
+            <Item floatingLabel>
+              <Label>Password</Label>
               <Input
-                placeholder="Password"
                 value={this.state.password}
                 onChangeText={password => this.setState({ password })}
                 secureTextEntry={true}
                 autoCapitalize="none"
               />
             </Item>
-
             <Body>
               <Button
                 onPress={() => this.buttonPress()}
@@ -76,8 +83,23 @@ export default class LogIn extends Component {
               </Button>
             </Body>
           </Form>
+          {backEndRes ? (
+            <Card style={styles.card}>
+              <CardItem>
+                <Body>
+                  <Text style={globalStyles.error}>{backEndRes}</Text>
+                </Body>
+              </CardItem>
+            </Card>
+          ) : null}
         </Content>
       </Container>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  card: {
+    marginTop: "10%"
+  }
+});

@@ -1,13 +1,8 @@
 import React from "react";
-import { Text, Body } from "native-base";
+import { Text } from "native-base";
 
 export default ({ props }) => {
   if (props) {
-    return (
-      <Body>
-        <Text>Username: {props.username}</Text>
-        <Text>Home Station: {props.home_station}</Text>
-      </Body>
-    );
+    return null;
   } else return null;
 };

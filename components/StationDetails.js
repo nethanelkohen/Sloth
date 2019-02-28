@@ -5,14 +5,13 @@ import { NavigationEvents } from "react-navigation";
 import StatusUpdate from "../functional/StatusUpdate";
 import PostData from "../functional/PostData";
 import fetchData from "../utils/fetchData";
+import styles from "../styles/styles";
 
 export default class StationDetails extends Component {
   state = {
     station: "",
     stationData: null,
-    postData: null,
-    score: 0,
-    postId: null
+    postData: null
   };
 
   getStore = async () => {
@@ -27,36 +26,34 @@ export default class StationDetails extends Component {
 
     fetchData(`post/all/${this.state.station}`, "get").then(data => {
       this.setState({ postData: data.message });
-      data.message.map(post => {
-        this.setState({ score: post.vetting_score, postId: post.id });
-      });
+      // data.message.map(post => this.setState({ score: post.vetting_score }));
     });
   };
 
-  counter = arg => {
+  counter = (arg, arg2) => {
+    const { postData } = this.state;
+    const newArray = [...postData];
+
+    const test = postData.filter(post => post.id === arg2);
+    const index = postData.indexOf(test[0]);
+
     if (arg === "increment") {
-      this.setState(prevState => {
-        return {
-          score: prevState.score + 1,
-          clicked: true
-        };
-      });
-      this.updateScore("increment");
+      newArray[index].vetting_score++;
+
+      this.setState({ postData: newArray });
+
+      this.updateScore("increment", arg2);
     } else if (arg === "decrement") {
-      this.setState(prevState => {
-        return {
-          score: prevState.score - 1,
-          clicked: true
-        };
-      });
-      this.updateScore("decrement");
+      newArray[index].vetting_score--;
+
+      this.setState({ postData: newArray });
+
+      this.updateScore("decrement", arg2);
     }
   };
 
-  updateScore = async arg => {
-    const { postId } = this.state;
-
-    fetchData(`post/${arg}/${postId}`, "put", {
+  updateScore = async (arg, arg2) => {
+    fetchData(`post/${arg}/${arg2}`, "put", {
       Accept: "application/json",
       "Content-Type": "application/json"
     });
@@ -66,7 +63,7 @@ export default class StationDetails extends Component {
     let { station, stationData } = this.state;
 
     return (
-      <Container>
+      <Container style={styles.container}>
         <NavigationEvents onDidFocus={() => this.getStore()} />
         <Header>
           <Text> Station: {station} </Text>

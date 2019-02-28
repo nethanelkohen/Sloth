@@ -1,17 +1,22 @@
 import React, { Component } from "react";
-import { Container, Header, Text } from "native-base";
+import { Container, Header, Text, Button, Body, Content } from "native-base";
 import { NavigationEvents } from "react-navigation";
 import store from "react-native-simple-store";
 import fetchData from "../utils/fetchData";
 import RenderHome from "../functional/RenderHome";
 import { StyleSheet, View, TextInput } from "react-native";
 import { Permissions, Notifications } from "expo";
+import {
+  setLightEstimationEnabled,
+  getLightEstimationEnabled
+} from "expo/build/AR";
 
 export default class Profile extends Component {
   state = {
     response: {},
     notification: {},
-    userId: null
+    userId: null,
+    dummy: 0
   };
 
   componentDidMount() {
@@ -29,7 +34,7 @@ export default class Profile extends Component {
 
     let userId = await store.get("userId");
 
-    let PUSH_REGISTRATION_ENDPOINT = `https://73ece240.ngrok.io/token/${
+    let PUSH_REGISTRATION_ENDPOINT = `https://cf5e3bf9.ngrok.io/token/${
       userId.userId
     }`;
 
@@ -60,7 +65,10 @@ export default class Profile extends Component {
       this.setState({ userId: res.userId });
     });
 
-    store.get("token").then(res => this.getProfile(res.token));
+    store.get("token").then(res => {
+      if (res == null) return;
+      this.getProfile(res.token);
+    });
   };
 
   getProfile = token => {
@@ -74,18 +82,42 @@ export default class Profile extends Component {
     ).then(newRes => this.setState({ response: newRes }));
   };
 
+  buttonPress = () => {
+    store.delete("userId");
+    store.delete("token");
+    store.delete("homeStation");
+    this.props.navigation.navigate("Status");
+    this.setState({ response: {} });
+  };
+
   render() {
     const { response } = this.state;
 
     return (
       <Container>
-        <NavigationEvents onDidFocus={() => this.getToken()} />
+        <NavigationEvents
+          onDidFocus={() => {
+            this.getToken();
+            console.log("x");
+          }}
+        />
         <Header>
           <Text>
             Profile Page for {response.username ? response.username : null}
           </Text>
         </Header>
-        <RenderHome props={response} />
+        <Content padder>
+          <Body>
+            <Text>Username: {response.username}</Text>
+            <Text>Home Station: {response.home_station}</Text>
+            <Button
+              onPress={() => this.buttonPress()}
+              style={{ marginTop: 20 }}
+            >
+              <Text>Log Out</Text>
+            </Button>
+          </Body>
+        </Content>
       </Container>
     );
   }

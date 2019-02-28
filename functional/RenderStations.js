@@ -1,5 +1,5 @@
 import React from "react";
-import { ListItem, Body, Right, Button, Text } from "native-base";
+import { List, ListItem, Body, Right, Button, Text } from "native-base";
 import { StyleSheet } from "react-native";
 import checkStatus from "../utils/checkStatus";
 
@@ -19,21 +19,25 @@ export default ({ stations, handlePress, homeStation }) => {
       };
 
       return (
-        <ListItem avatar key={station.id} style={checkHome()}>
-          <Body>
-            <Button transparent onPress={() => handlePress(station.station)}>
-              <Text style={checkStatus(station.status)}>{station.station}</Text>
-            </Button>
-            <Text style={{ fontSize: 16 }} note>
-              last updated: {nycTime.toLocaleString()}
-            </Text>
-          </Body>
-          <Right>
-            <Text note style={checkStatus(station.status)}>
-              {station.status}
-            </Text>
-          </Right>
-        </ListItem>
+        <List key={station.id} style={checkHome()}>
+          <ListItem avatar>
+            <Body>
+              <Button transparent onPress={() => handlePress(station.station)}>
+                <Text style={checkStatus(station.status)}>
+                  {station.station}
+                </Text>
+              </Button>
+              <Text style={{ fontSize: 16 }} note>
+                last updated: {nycTime.toLocaleString()}
+              </Text>
+            </Body>
+            <Right>
+              <Text note style={checkStatus(station.status)}>
+                {station.status}
+              </Text>
+            </Right>
+          </ListItem>
+        </List>
       );
     });
   }
@@ -41,8 +45,8 @@ export default ({ stations, handlePress, homeStation }) => {
 
 const styles = StyleSheet.create({
   redBorder: {
-    borderRadius: 10,
+    borderRadius: 3,
     borderWidth: 10,
-    borderColor: "red"
+    borderColor: "#5b0654"
   }
 });

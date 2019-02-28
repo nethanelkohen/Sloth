@@ -39,8 +39,6 @@ export default class TrainStatus extends Component {
   };
 
   render() {
-    const { stations, homeStation } = this.state;
-
     return (
       <Container style={styles.container}>
         <NavigationEvents onDidFocus={() => this.getUpdates()} />
@@ -48,14 +46,7 @@ export default class TrainStatus extends Component {
           <Text style={{ fontSize: 30 }}>S L O T H</Text>
         </Header>
         <Content>
-          <List>
-            <RenderStations
-              // homeStation={homeStation}
-              // stations={stations}
-              {...this.state}
-              handlePress={this.handlePress}
-            />
-          </List>
+          <RenderStations {...this.state} handlePress={this.handlePress} />
         </Content>
       </Container>
     );

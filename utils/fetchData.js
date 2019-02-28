@@ -1,5 +1,5 @@
 const fetchData = async (arg, method, headers, body) => {
-  const url = `https://73ece240.ngrok.io/${arg}`;
+  const url = `https://cf5e3bf9.ngrok.io/${arg}`;
   // const url = `http://localhost:3000/${arg}`;
 
   return await fetch(url, {

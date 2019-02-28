@@ -11,9 +11,12 @@ import {
   Text,
   Icon,
   Picker,
-  Body
+  Body,
+  Card,
+  CardItem
 } from "native-base";
 import fetchData from "../utils/fetchData";
+import styles from "../styles/styles";
 
 export default class SignUp extends Component {
   state = {
@@ -21,7 +24,8 @@ export default class SignUp extends Component {
     pasword: "",
     home_station: undefined,
     onboarding_completed: true,
-    notifications_setting: 0
+    notifications_setting: 0,
+    backEndRes: null
   };
 
   buttonPress = arg => {
@@ -35,8 +39,10 @@ export default class SignUp extends Component {
     }
 
     arg
-      .then(newRes => console.log("jhere is new res", newRes))
+      .then(newRes => Alert.alert(newRes.message))
       .catch(err => console.error(err));
+
+    setTimeout(() => this.props.navigation.navigate("LogIn"), 1000);
   };
 
   setStation = value => this.setState({ home_station: value });
@@ -44,8 +50,10 @@ export default class SignUp extends Component {
   setNotifications = value => this.setState({ notifications_setting: value });
 
   render() {
+    const { backEndRes } = this.state;
+
     return (
-      <Container>
+      <Container style={styles.container}>
         <Header>
           <Text>Create an account</Text>
         </Header>
