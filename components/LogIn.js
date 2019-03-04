@@ -76,6 +76,7 @@ export default class LogIn extends Component {
             </Item>
             <Body>
               <Button
+                large
                 onPress={() => this.buttonPress()}
                 style={{ marginTop: 20 }}
               >

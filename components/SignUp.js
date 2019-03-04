@@ -12,8 +12,7 @@ import {
   Icon,
   Picker,
   Body,
-  Card,
-  CardItem
+  Label
 } from "native-base";
 import fetchData from "../utils/fetchData";
 import styles from "../styles/styles";
@@ -24,8 +23,7 @@ export default class SignUp extends Component {
     pasword: "",
     home_station: undefined,
     onboarding_completed: true,
-    notifications_setting: 0,
-    backEndRes: null
+    notifications_setting: 0
   };
 
   buttonPress = arg => {
@@ -50,34 +48,31 @@ export default class SignUp extends Component {
   setNotifications = value => this.setState({ notifications_setting: value });
 
   render() {
-    const { backEndRes } = this.state;
-
     return (
       <Container style={styles.container}>
         <Header>
           <Text>Create an account</Text>
         </Header>
-        <Content>
+        <Content style={{ marginTop: "2%" }}>
           <Form>
-            <Item>
+            <Item floatingLabel>
+              <Label>Username</Label>
               <Input
-                placeholder="Username"
                 value={this.state.username}
                 onChangeText={username => this.setState({ username })}
                 autoCapitalize="none"
               />
             </Item>
-            <Item>
+            <Item floatingLabel>
+              <Label>Password</Label>
               <Input
-                placeholder="Password"
                 value={this.state.password}
                 onChangeText={password => this.setState({ password })}
-                secureTextEntry={true}
                 autoCapitalize="none"
+                secureTextEntry={true}
               />
             </Item>
-
-            <Item picker>
+            <Item picker style={{ marginTop: "2%" }}>
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
@@ -99,7 +94,7 @@ export default class SignUp extends Component {
                 <Picker.Item label="Ditmars" value="Ditmars" />
               </Picker>
             </Item>
-            <Item picker>
+            <Item picker style={{ marginTop: "2%" }}>
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
@@ -114,8 +109,10 @@ export default class SignUp extends Component {
                 <Picker.Item label="Whenever there's a delay" value="2" />
               </Picker>
             </Item>
-            <Body>
+            <Body style={{ marginTop: "5%" }}>
               <Button
+                iconLeft
+                large
                 onPress={() =>
                   this.buttonPress(
                     fetchData(
@@ -129,8 +126,8 @@ export default class SignUp extends Component {
                     )
                   )
                 }
-                style={{ marginTop: 20 }}
               >
+                <Icon name="person-add" />
                 <Text>Sign Up!</Text>
               </Button>
             </Body>

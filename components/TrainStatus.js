@@ -14,6 +14,8 @@ export default class TrainStatus extends Component {
 
   getUpdates = () => {
     fetchData("station/all", "get").then(stations => {
+      console.log(stations);
+
       this.setState({ stations: stations.message });
     });
 
