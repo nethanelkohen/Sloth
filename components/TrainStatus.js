@@ -14,14 +14,13 @@ export default class TrainStatus extends Component {
 
   getUpdates = () => {
     fetchData("station/all", "get").then(stations => {
-      console.log(stations);
-
       this.setState({ stations: stations.message });
     });
 
     store.get("homeStation").then(res => {
-      if (res === null) return;
-      this.setState({ homeStation: res.homeStation });
+      if (res === null) {
+        this.setState({ homeStation: "" });
+      } else this.setState({ homeStation: res.homeStation });
     });
   };
 

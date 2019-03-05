@@ -42,9 +42,14 @@ export default class LogIn extends Component {
     ).then(userRes => {
       this.setState({ backEndRes: userRes.message });
 
-      store.save("homeStation", { homeStation: userRes.userInfo.home_station });
-      store.save("token", { token: userRes.token });
-      store.save("userId", { userId: userRes.user });
+      if (userRes.user) {
+        store.save("homeStation", { homeStation: userRes.user.home_station });
+        store.save("userId", { userId: userRes.user.id });
+      }
+
+      if (userRes.token) {
+        store.save("token", { token: userRes.token });
+      }
     });
   };
 

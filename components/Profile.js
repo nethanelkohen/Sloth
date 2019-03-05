@@ -93,14 +93,11 @@ export default class Profile extends Component {
   render() {
     const { response } = this.state;
 
+    console.log("ress:", response);
+
     return (
       <Container>
-        <NavigationEvents
-          onDidFocus={() => {
-            this.getToken();
-            console.log("x");
-          }}
-        />
+        <NavigationEvents onDidFocus={() => this.getToken()} />
         <Header>
           <Text>
             Profile Page for {response.username ? response.username : null}

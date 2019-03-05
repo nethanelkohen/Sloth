@@ -7,6 +7,7 @@ import Post from "./components/Post";
 import LogIn from "./components/LogIn";
 import SignUp from "./components/SignUp";
 import StationDetails from "./components/StationDetails";
+import Mta from "./components/Mta";
 import Profile from "./components/Profile";
 
 // ADD VETTING FUNC
@@ -67,6 +68,17 @@ const TabNavigator = createBottomTabNavigator({
         showIcon: true
       },
       tabBarIcon: () => <Icon name="subway" size={25} color="#900" />
+    }
+  },
+  Mta: {
+    screen: Mta,
+
+    navigationOptions: {
+      tabBarLabel: "MTA",
+      tabBarOptions: {
+        showIcon: true
+      },
+      tabBarIcon: () => <Icon name="warning" size={25} color="#900" />
     }
   },
   Profile: {
