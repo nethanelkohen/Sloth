@@ -1,9 +1,4 @@
-import { StyleSheet } from "react-native";
-import {
-  sanFranciscoSpacing,
-  iOSColors,
-  sanFranciscoWeights
-} from "react-native-typography";
+import styles from "../styles/styles";
 
 checkStatus = arg => {
   if (typeof arg == "object") return;
@@ -15,17 +10,5 @@ checkStatus = arg => {
   else if (arg.includes("delayed") == 1) return [styles.size, styles.yellow];
   else return [styles.size, styles.black];
 };
-
-const styles = StyleSheet.create({
-  size: {
-    ...sanFranciscoWeights.heavy,
-    fontSize: 24,
-    letterSpacing: sanFranciscoSpacing(24)
-  },
-  green: { color: iOSColors.green },
-  red: { color: iOSColors.red },
-  yellow: { color: iOSColors.yellow },
-  black: { color: iOSColors.black }
-});
 
 export default checkStatus;
