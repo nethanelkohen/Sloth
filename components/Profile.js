@@ -3,58 +3,20 @@ import { Container, Header, Text, Button, Body, Content } from "native-base";
 import { NavigationEvents } from "react-navigation";
 import store from "react-native-simple-store";
 import fetchData from "../utils/fetchData";
-import RenderHome from "../functional/RenderHome";
-import { StyleSheet, View, TextInput } from "react-native";
-import { Permissions, Notifications } from "expo";
-import {
-  setLightEstimationEnabled,
-  getLightEstimationEnabled
-} from "expo/build/AR";
+import { Notifications } from "expo";
 
 export default class Profile extends Component {
   state = {
     response: {},
     notification: {},
-    userId: null,
-    dummy: 0
+    userId: null
   };
 
   componentDidMount() {
-    this.registerForPushNotificationsAsync();
-
     this._notificationSubscription = Notifications.addListener(
       this.handleNotification
     );
   }
-
-  registerForPushNotificationsAsync = async () => {
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-
-    if (status !== "granted") return;
-
-    let userId = await store.get("userId");
-
-    let PUSH_REGISTRATION_ENDPOINT = `https://cf5e3bf9.ngrok.io/token/${
-      userId.userId
-    }`;
-
-    let token = await Notifications.getExpoPushTokenAsync();
-
-    await fetch(PUSH_REGISTRATION_ENDPOINT, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        token: { token },
-        user: {
-          username: "warly",
-          name: "Dan Ward"
-        }
-      })
-    }).then(res => console.log("response from token registration", res));
-  };
 
   handleNotification = notification =>
     this.setState({ notification: notification });
@@ -92,8 +54,6 @@ export default class Profile extends Component {
 
   render() {
     const { response } = this.state;
-
-    console.log("ress:", response);
 
     return (
       <Container>

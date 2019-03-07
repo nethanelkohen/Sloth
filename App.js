@@ -17,7 +17,6 @@ const TabNavigator = createBottomTabNavigator({
 
   Status: {
     screen: TrainStatus,
-
     navigationOptions: {
       tabBarLabel: "Status",
       tabBarOptions: {
@@ -28,7 +27,6 @@ const TabNavigator = createBottomTabNavigator({
   },
   Post: {
     screen: Post,
-
     navigationOptions: {
       tabBarLabel: "Post",
       tabBarOptions: {

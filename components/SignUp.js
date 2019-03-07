@@ -15,7 +15,9 @@ import {
   Label
 } from "native-base";
 import fetchData from "../utils/fetchData";
+import store from "react-native-simple-store";
 import styles from "../styles/styles";
+import { Permissions, Notifications } from "expo";
 
 export default class SignUp extends Component {
   state = {
@@ -23,10 +25,11 @@ export default class SignUp extends Component {
     pasword: "",
     home_station: undefined,
     onboarding_completed: true,
-    notifications_setting: 0
+    notifications_setting: 0,
+    userId: null
   };
 
-  buttonPress = arg => {
+  buttonPress = async arg => {
     let { username, home_station } = this.state;
     if (username.length < 4) {
       return Alert.alert("Username must be at least 4 characters");
@@ -37,10 +40,35 @@ export default class SignUp extends Component {
     }
 
     arg
-      .then(newRes => Alert.alert(newRes.message))
+      .then(user => {
+        console.log("NEWRES:", user);
+        store.save("userId", { userId: user.results.id });
+        this.setState({ userId: user.results.id });
+        this.registerForPushNotificationsAsync();
+      })
+      // .then(argRes => Alert.alert(argRes.message))
       .catch(err => console.error(err));
 
     setTimeout(() => this.props.navigation.navigate("LogIn"), 1000);
+  };
+
+  registerForPushNotificationsAsync = async () => {
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
+    if (status !== "granted") return;
+
+    let token = await Notifications.getExpoPushTokenAsync();
+
+    await fetch(`https://2a04575f.ngrok.io/token/${this.state.userId}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        token: { token }
+      })
+    }).then(res => console.log("response from token registration", res));
   };
 
   setStation = value => this.setState({ home_station: value });
