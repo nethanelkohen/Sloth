@@ -4,8 +4,8 @@ import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 
 import TrainStatus from "./components/TrainStatus";
 import Post from "./components/Post";
-import LogIn from "./components/LogIn";
-import SignUp from "./components/SignUp";
+// import LogIn from "./components/LogIn";
+// import SignUp from "./components/SignUp";
 import StationDetails from "./components/StationDetails";
 import Mta from "./components/Mta";
 import Profile from "./components/Profile";
@@ -13,7 +13,28 @@ import Profile from "./components/Profile";
 // ADD VETTING FUNC
 
 const TabNavigator = createBottomTabNavigator({
-  // Home: App,
+  // SignUp: {
+  //   screen: SignUp,
+
+  //   navigationOptions: {
+  //     tabBarLabel: "Sign Up",
+  //     tabBarOptions: {
+  //       showIcon: true
+  //     },
+  //     tabBarIcon: () => <Icon name="person-add" size={25} color="#900" />
+  //   }
+  // },
+  // LogIn: {
+  //   screen: LogIn,
+
+  //   navigationOptions: {
+  //     tabBarLabel: "Log In",
+  //     tabBarOptions: {
+  //       showIcon: true
+  //     },
+  //     tabBarIcon: () => <Icon name="person" size={25} color="#900" />
+  //   }
+  // },
 
   Status: {
     screen: TrainStatus,
@@ -33,28 +54,6 @@ const TabNavigator = createBottomTabNavigator({
         showIcon: true
       },
       tabBarIcon: () => <Icon name="add" size={25} color="#900" />
-    }
-  },
-  SignUp: {
-    screen: SignUp,
-
-    navigationOptions: {
-      tabBarLabel: "Sign Up",
-      tabBarOptions: {
-        showIcon: true
-      },
-      tabBarIcon: () => <Icon name="person-add" size={25} color="#900" />
-    }
-  },
-  LogIn: {
-    screen: LogIn,
-
-    navigationOptions: {
-      tabBarLabel: "Log In",
-      tabBarOptions: {
-        showIcon: true
-      },
-      tabBarIcon: () => <Icon name="person" size={25} color="#900" />
     }
   },
   StationDetails: {

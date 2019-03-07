@@ -41,7 +41,6 @@ export default class SignUp extends Component {
 
     arg
       .then(user => {
-        console.log("NEWRES:", user);
         store.save("userId", { userId: user.results.id });
         this.setState({ userId: user.results.id });
         this.registerForPushNotificationsAsync();

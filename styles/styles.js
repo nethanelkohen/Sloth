@@ -18,6 +18,9 @@ export default StyleSheet.create({
   red: { color: iOSColors.red },
   yellow: { color: iOSColors.yellow },
   black: { color: iOSColors.black },
+  card: {
+    marginTop: "10%"
+  },
   error: {
     color: "red",
     fontSize: 20

@@ -63,7 +63,7 @@ export default class TrainStatus extends Component {
       <Container style={styles.container}>
         <NavigationEvents onDidFocus={() => this.getUpdates()} />
         <Header>
-          <Text>Status: {mtaResponse && mtaResponse.status}</Text>
+          <Text style={{ fontSize: 22 }}>N W Updates</Text>
         </Header>
         <RenderMta mtaResponse={mtaResponse} />
       </Container>

@@ -1,15 +1,38 @@
 import React, { Component } from "react";
-import { Container, Header, Text, Button, Body, Content } from "native-base";
+import {
+  Container,
+  Content,
+  Header,
+  Form,
+  Item,
+  Input,
+  Button,
+  Label,
+  Text,
+  Body,
+  Icon,
+  Picker
+} from "native-base";
+import { Alert, View } from "react-native";
 import { NavigationEvents } from "react-navigation";
 import store from "react-native-simple-store";
 import fetchData from "../utils/fetchData";
-import { Notifications } from "expo";
+import { Notifications, Permissions } from "expo";
+import styles from "../styles/styles";
+import ProfileRes from "../functional/ProfileRes";
 
 export default class Profile extends Component {
   state = {
     response: {},
     notification: {},
-    userId: null
+    userId: null,
+    backEndRes: null,
+    username: "",
+    password: "",
+    home_station: undefined,
+    onboarding_completed: true,
+    notifications_setting: 0,
+    showSignUp: false
   };
 
   componentDidMount() {
@@ -44,36 +67,267 @@ export default class Profile extends Component {
     ).then(newRes => this.setState({ response: newRes }));
   };
 
-  buttonPress = () => {
+  logOut = () => {
     store.delete("userId");
     store.delete("token");
     store.delete("homeStation");
-    this.props.navigation.navigate("Status");
-    this.setState({ response: {} });
+    this.setState({
+      response: {},
+      backEndRes: "Logged out!",
+      username: "",
+      password: "",
+      home_station: undefined,
+      onboarding_completed: true,
+      notifications_setting: 0
+    });
+  };
+
+  signUp = async arg => {
+    let { username, home_station } = this.state;
+    if (username.length < 4) {
+      return Alert.alert("Username must be at least 4 characters");
+    }
+
+    if (home_station == undefined) {
+      return Alert.alert("Please choose a home station");
+    }
+
+    arg
+      .then(user => {
+        store.save("userId", { userId: user.results.id });
+        this.setState({ userId: user.results.id });
+        this.registerForPushNotificationsAsync();
+      })
+      // .then(argRes => Alert.alert(argRes.message))
+      .catch(err => console.error(err));
+
+    setTimeout(() => this.logIn(), 1500);
+
+    // setTimeout(() => this.props.navigation.navigate("LogIn"), 1000);
+  };
+
+  registerForPushNotificationsAsync = async () => {
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
+    if (status !== "granted") return;
+
+    let token = await Notifications.getExpoPushTokenAsync();
+
+    await fetch(`https://2a04575f.ngrok.io/token/${this.state.userId}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        token: { token }
+      })
+    }).then(res => console.log("response from token registration", res));
+  };
+
+  setStation = value => this.setState({ home_station: value });
+
+  setNotifications = value => this.setState({ notifications_setting: value });
+
+  logIn = () => {
+    const { username } = this.state;
+    if (username.length < 4) {
+      return Alert.alert("Username must be at least 4 characters");
+    }
+
+    fetchData(
+      "auth/login",
+      "post",
+      {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      JSON.stringify(this.state)
+    ).then(userRes => {
+      this.setState({ backEndRes: userRes.message });
+
+      if (userRes.user) {
+        store.save("homeStation", { homeStation: userRes.user.home_station });
+        store.save("userId", { userId: userRes.user.id });
+      }
+
+      if (userRes.token) {
+        store.save("token", { token: userRes.token });
+      }
+    });
+    setTimeout(() => this.props.navigation.navigate("Status"), 1500);
+  };
+
+  showProfileInfo = response => {
+    if (Object.keys(response).length === 0) return null;
+    else {
+      return (
+        <Body>
+          <Text>Username: {response.username}</Text>
+          <Text>Home Station: {response.home_station}</Text>
+          <Button onPress={() => this.logOut()} style={{ marginTop: 20 }}>
+            <Text>Log Out</Text>
+          </Button>
+        </Body>
+      );
+    }
+  };
+
+  showSignUpForm = (showSignUp, response) => {
+    if (response && response.username) return null;
+
+    if (showSignUp) {
+      return (
+        <View>
+          <Button
+            onPress={() =>
+              this.setState(prevState => ({
+                showSignUp: !prevState.showSignUp
+              }))
+            }
+          >
+            <Text>{!showSignUp ? `Sign Up` : `Log In`}</Text>
+          </Button>
+          <Form>
+            <Item floatingLabel>
+              <Label>Username</Label>
+              <Input
+                value={this.state.username}
+                onChangeText={username => this.setState({ username })}
+                autoCapitalize="none"
+              />
+            </Item>
+            <Item floatingLabel>
+              <Label>Password</Label>
+              <Input
+                value={this.state.password}
+                onChangeText={password => this.setState({ password })}
+                autoCapitalize="none"
+                secureTextEntry={true}
+              />
+            </Item>
+            <Item picker style={{ marginTop: "2%" }}>
+              <Picker
+                mode="dropdown"
+                iosIcon={<Icon name="arrow-down" />}
+                placeholder="Select your home station"
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={this.state.home_station}
+                onValueChange={this.setStation}
+              >
+                <Picker.Item
+                  label="Queensboro Plaza"
+                  value="Queensboro Plaza"
+                />
+                <Picker.Item label="39th Ave" value="39th Ave" />
+                <Picker.Item label="36th Ave" value="36th Ave" />
+                <Picker.Item label="Broadway" value="Broadway" />
+                <Picker.Item label="30th Ave" value="30th Ave" />
+                <Picker.Item label="Astoria Blvd" value="Astoria Blvd" />
+                <Picker.Item label="Ditmars" value="Ditmars" />
+              </Picker>
+            </Item>
+            <Item picker style={{ marginTop: "2%" }}>
+              <Picker
+                mode="dropdown"
+                iosIcon={<Icon name="arrow-down" />}
+                placeholder="Select your notifications settings (default: none)"
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={this.state.notifications_setting}
+                onValueChange={this.setNotifications}
+              >
+                <Picker.Item label="Never alert me" value="0" />
+                <Picker.Item label="Alert me daily at 8:30 AM" value="1" />
+                <Picker.Item label="Whenever there's a delay" value="2" />
+              </Picker>
+            </Item>
+            <Body style={{ marginTop: "5%" }}>
+              <Button
+                iconLeft
+                large
+                onPress={() =>
+                  this.signUp(
+                    fetchData(
+                      "user",
+                      "post",
+                      {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                      },
+                      JSON.stringify(this.state)
+                    )
+                  )
+                }
+              >
+                <Icon name="person-add" />
+                <Text>Sign Up!</Text>
+              </Button>
+            </Body>
+          </Form>
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <Button
+            onPress={() =>
+              this.setState(prevState => ({
+                showSignUp: !prevState.showSignUp
+              }))
+            }
+          >
+            <Text>{!showSignUp ? `Sign Up` : `Log In`}</Text>
+          </Button>
+          <Form>
+            <Item floatingLabel>
+              <Label>Username</Label>
+              <Input
+                value={this.state.username}
+                onChangeText={username => this.setState({ username })}
+                autoCapitalize="none"
+              />
+            </Item>
+            <Item floatingLabel>
+              <Label>Password</Label>
+              <Input
+                value={this.state.password}
+                onChangeText={password => this.setState({ password })}
+                secureTextEntry={true}
+                autoCapitalize="none"
+              />
+            </Item>
+            <Body>
+              <Button
+                large
+                onPress={() => this.logIn()}
+                style={{ marginTop: 20 }}
+              >
+                <Icon name="person" />
+                <Text>Log In!</Text>
+              </Button>
+            </Body>
+          </Form>
+        </View>
+      );
+    }
   };
 
   render() {
-    const { response } = this.state;
+    const { showSignUp, response, backEndRes } = this.state;
 
     return (
-      <Container>
+      <Container style={styles.container} padder>
         <NavigationEvents onDidFocus={() => this.getToken()} />
         <Header>
-          <Text>
-            Profile Page for {response.username ? response.username : null}
-          </Text>
+          <Text>SLOTH</Text>
         </Header>
+        {/* <Content style={{ marginTop: "2%" }}> */}
         <Content padder>
-          <Body>
-            <Text>Username: {response.username}</Text>
-            <Text>Home Station: {response.home_station}</Text>
-            <Button
-              onPress={() => this.buttonPress()}
-              style={{ marginTop: 20 }}
-            >
-              <Text>Log Out</Text>
-            </Button>
-          </Body>
+          {this.showSignUpForm(showSignUp, response)}
+          {this.showProfileInfo(response)}
+          <ProfileRes backEndRes={backEndRes} />
         </Content>
       </Container>
     );
