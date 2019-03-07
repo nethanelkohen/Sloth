@@ -5,7 +5,6 @@ import RenderMta from "../functional/RenderMta";
 import Headers from "../functional/Headers";
 import fetchData from "../utils/fetchData";
 import styles from "../styles/styles";
-import store from "react-native-simple-store";
 import changeTime from "../utils/changeTime";
 import changeStation from "../utils/changeStation";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import checkStatus from "../utils/checkStatus";
-import { ListItem, Text, Body, Button, Content } from "native-base";
+import { ListItem, Text, Body, Button } from "native-base";
 import styles from "../styles/styles";
 
 export default ({ postData, counter }) => {

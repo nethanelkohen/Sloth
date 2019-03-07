@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Container, Header, Text, Button, Body, Content } from "native-base";
+import { Container } from "native-base";
 import { NavigationEvents } from "react-navigation";
 import store from "react-native-simple-store";
 import fetchData from "../utils/fetchData";
-import { Notifications } from "expo";
 
 export default class Profile extends Component {
   state = {
