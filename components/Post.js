@@ -1,19 +1,19 @@
 import React, { Component } from "react";
 import {
   Container,
-  Header,
   Content,
   Form,
   Item,
   Input,
-  Button,
-  Text,
   Icon,
   Picker,
   Body
 } from "native-base";
+import { Alert } from "react-native";
 import fetchData from "../utils/fetchData";
 import RenderPost from "../functional/RenderPost";
+import MyButton from "../functional/MyButton";
+import Headers from "../functional/Headers";
 import styles from "../styles/styles";
 
 export default class SignUp extends Component {
@@ -42,9 +42,7 @@ export default class SignUp extends Component {
 
     return (
       <Container style={styles.container}>
-        <Header>
-          <Text>What's going on?</Text>
-        </Header>
+        <Headers props={"What's going on?"} />
         <Content>
           <Form>
             <Item picker>
@@ -52,7 +50,8 @@ export default class SignUp extends Component {
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
                 placeholder="Which station would you like to update?"
-                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderStyle={styles.smallSize}
+                itemTextStyle={styles.smallSize}
                 placeholderIconColor="#007aff"
                 selectedValue={station}
                 onValueChange={station => this.setState({ station })}
@@ -74,7 +73,8 @@ export default class SignUp extends Component {
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
                 placeholder="Which train?"
-                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderStyle={styles.smallSize}
+                itemTextStyle={styles.smallSize}
                 placeholderIconColor="#007aff"
                 selectedValue={train}
                 onValueChange={train => this.setState({ train })}
@@ -88,7 +88,8 @@ export default class SignUp extends Component {
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
                 placeholder="What is the status update?"
-                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderStyle={styles.smallSize}
+                itemTextStyle={styles.smallSize}
                 placeholderIconColor="#007aff"
                 selectedValue={status_update}
                 onValueChange={status_update =>
@@ -105,13 +106,24 @@ export default class SignUp extends Component {
             <Item>
               <Input
                 placeholder="Any comments?"
+                style={styles.smallSize}
                 value={comments}
                 onChangeText={comments => this.setState({ comments })}
               />
             </Item>
             <Body>
-              <Button
-                onPress={() =>
+              <MyButton
+                onPress={() => {
+                  const { station, train, status_update } = this.state;
+                  if (
+                    station == undefined ||
+                    train == undefined ||
+                    status_update == undefined
+                  )
+                    return Alert.alert(
+                      "Please fill out the status update completely"
+                    );
+
                   this.buttonPress(
                     fetchData(
                       "post",
@@ -122,12 +134,10 @@ export default class SignUp extends Component {
                       },
                       JSON.stringify(this.state)
                     )
-                  )
-                }
-                style={{ marginTop: 20 }}
-              >
-                <Text>Update!</Text>
-              </Button>
+                  );
+                }}
+                props={"Update!"}
+              />
             </Body>
           </Form>
           <RenderPost props={updateConfirm} />

@@ -12,15 +12,6 @@ export default class Profile extends Component {
     userId: null
   };
 
-  componentDidMount() {
-    this._notificationSubscription = Notifications.addListener(
-      this.handleNotification
-    );
-  }
-
-  handleNotification = notification =>
-    this.setState({ notification: notification });
-
   getToken = () => {
     store.get("userId").then(res => {
       if (res === null) return;
@@ -44,37 +35,10 @@ export default class Profile extends Component {
     ).then(newRes => this.setState({ response: newRes }));
   };
 
-  buttonPress = () => {
-    store.delete("userId");
-    store.delete("token");
-    store.delete("homeStation");
-    this.props.navigation.navigate("Status");
-    this.setState({ response: {} });
-  };
-
   render() {
-    const { response } = this.state;
-
     return (
       <Container>
         <NavigationEvents onDidFocus={() => this.getToken()} />
-        <Header>
-          <Text>
-            Profile Page for {response.username ? response.username : null}
-          </Text>
-        </Header>
-        <Content padder>
-          <Body>
-            <Text>Username: {response.username}</Text>
-            <Text>Home Station: {response.home_station}</Text>
-            <Button
-              onPress={() => this.buttonPress()}
-              style={{ marginTop: 20 }}
-            >
-              <Text>Log Out</Text>
-            </Button>
-          </Body>
-        </Content>
       </Container>
     );
   }

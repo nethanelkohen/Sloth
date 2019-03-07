@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Container, Header, Content, List, Text } from "native-base";
+import { Container, Content } from "native-base";
 import { NavigationEvents } from "react-navigation";
 import store from "react-native-simple-store";
 import fetchData from "../utils/fetchData";
+import Headers from "../functional/Headers";
 import RenderStations from "../functional/RenderStations";
 import styles from "../styles/styles";
 
@@ -40,14 +41,16 @@ export default class TrainStatus extends Component {
   };
 
   render() {
+    const { stations } = this.state;
+
     return (
       <Container style={styles.container}>
         <NavigationEvents onDidFocus={() => this.getUpdates()} />
-        <Header>
-          <Text style={{ fontSize: 30 }}>S L O T H</Text>
-        </Header>
+        <Headers props={"S L O T H"} />
         <Content>
-          <RenderStations {...this.state} handlePress={this.handlePress} />
+          {stations.length > 0 ? (
+            <RenderStations {...this.state} handlePress={this.handlePress} />
+          ) : null}
         </Content>
       </Container>
     );

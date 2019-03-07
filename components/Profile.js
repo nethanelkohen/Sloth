@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import {
   Container,
   Content,
-  Header,
   Form,
   Item,
   Input,
-  Button,
   Label,
   Text,
   Body,
@@ -20,6 +18,8 @@ import fetchData from "../utils/fetchData";
 import { Notifications, Permissions } from "expo";
 import styles from "../styles/styles";
 import ProfileRes from "../functional/ProfileRes";
+import ShowHeader from "../functional/Headers";
+import MyButton from "../functional/MyButton";
 
 export default class Profile extends Component {
   state = {
@@ -41,8 +41,9 @@ export default class Profile extends Component {
     );
   }
 
-  handleNotification = notification =>
+  handleNotification = notification => {
     this.setState({ notification: notification });
+  };
 
   getToken = () => {
     store.get("userId").then(res => {
@@ -101,9 +102,7 @@ export default class Profile extends Component {
       // .then(argRes => Alert.alert(argRes.message))
       .catch(err => console.error(err));
 
-    setTimeout(() => this.logIn(), 1500);
-
-    // setTimeout(() => this.props.navigation.navigate("LogIn"), 1000);
+    // setTimeout(() => this.logIn(), 1500);
   };
 
   registerForPushNotificationsAsync = async () => {
@@ -124,10 +123,6 @@ export default class Profile extends Component {
       })
     }).then(res => console.log("response from token registration", res));
   };
-
-  setStation = value => this.setState({ home_station: value });
-
-  setNotifications = value => this.setState({ notifications_setting: value });
 
   logIn = () => {
     const { username } = this.state;
@@ -162,13 +157,17 @@ export default class Profile extends Component {
     if (Object.keys(response).length === 0) return null;
     else {
       return (
-        <Body>
-          <Text>Username: {response.username}</Text>
-          <Text>Home Station: {response.home_station}</Text>
-          <Button onPress={() => this.logOut()} style={{ marginTop: 20 }}>
-            <Text>Log Out</Text>
-          </Button>
-        </Body>
+        <View>
+          <Body>
+            <Text style={styles.size}>User: {response.username}</Text>
+            <Text style={styles.size}>
+              Home Station: {response.home_station}
+            </Text>
+          </Body>
+          <Body>
+            <MyButton onPress={() => this.logOut()} props={"Log Out"} />
+          </Body>
+        </View>
       );
     }
   };
@@ -179,31 +178,35 @@ export default class Profile extends Component {
     if (showSignUp) {
       return (
         <View>
-          <Button
-            onPress={() =>
-              this.setState(prevState => ({
-                showSignUp: !prevState.showSignUp
-              }))
-            }
-          >
-            <Text>{!showSignUp ? `Sign Up` : `Log In`}</Text>
-          </Button>
+          <Body>
+            <MyButton
+              onPress={() =>
+                this.setState(prevState => ({
+                  showSignUp: !prevState.showSignUp
+                }))
+              }
+              props={!showSignUp ? `Sign Up` : `Log In`}
+            />
+          </Body>
+
           <Form>
             <Item floatingLabel>
-              <Label>Username</Label>
+              <Label style={styles.smallSize}>Username</Label>
               <Input
                 value={this.state.username}
                 onChangeText={username => this.setState({ username })}
                 autoCapitalize="none"
+                style={styles.smallSize}
               />
             </Item>
             <Item floatingLabel>
-              <Label>Password</Label>
+              <Label style={styles.smallSize}>Password</Label>
               <Input
                 value={this.state.password}
                 onChangeText={password => this.setState({ password })}
                 autoCapitalize="none"
                 secureTextEntry={true}
+                style={styles.smallSize}
               />
             </Item>
             <Item picker style={{ marginTop: "2%" }}>
@@ -211,10 +214,11 @@ export default class Profile extends Component {
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
                 placeholder="Select your home station"
-                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderStyle={styles.smallSize}
+                itemTextStyle={styles.smallSize}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.home_station}
-                onValueChange={this.setStation}
+                onValueChange={value => this.setState({ home_station: value })}
               >
                 <Picker.Item
                   label="Queensboro Plaza"
@@ -232,11 +236,14 @@ export default class Profile extends Component {
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
-                placeholder="Select your notifications settings (default: none)"
-                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholder="Select notifications (default: none)"
+                placeholderStyle={styles.smallSize}
+                itemTextStyle={styles.smallSize}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.notifications_setting}
-                onValueChange={this.setNotifications}
+                onValueChange={value =>
+                  this.setState({ notifications_setting: value })
+                }
               >
                 <Picker.Item label="Never alert me" value="0" />
                 <Picker.Item label="Alert me daily at 8:30 AM" value="1" />
@@ -244,9 +251,7 @@ export default class Profile extends Component {
               </Picker>
             </Item>
             <Body style={{ marginTop: "5%" }}>
-              <Button
-                iconLeft
-                large
+              <MyButton
                 onPress={() =>
                   this.signUp(
                     fetchData(
@@ -260,10 +265,9 @@ export default class Profile extends Component {
                     )
                   )
                 }
-              >
-                <Icon name="person-add" />
-                <Text>Sign Up!</Text>
-              </Button>
+                props={"Go!"}
+                icon={"person-add"}
+              />
             </Body>
           </Form>
         </View>
@@ -271,42 +275,42 @@ export default class Profile extends Component {
     } else {
       return (
         <View>
-          <Button
-            onPress={() =>
-              this.setState(prevState => ({
-                showSignUp: !prevState.showSignUp
-              }))
-            }
-          >
-            <Text>{!showSignUp ? `Sign Up` : `Log In`}</Text>
-          </Button>
+          <Body>
+            <MyButton
+              onPress={() =>
+                this.setState(prevState => ({
+                  showSignUp: !prevState.showSignUp
+                }))
+              }
+              props={!showSignUp ? `Sign Up` : `Log In`}
+            />
+          </Body>
           <Form>
             <Item floatingLabel>
-              <Label>Username</Label>
+              <Label style={styles.smallSize}>Username</Label>
               <Input
                 value={this.state.username}
                 onChangeText={username => this.setState({ username })}
                 autoCapitalize="none"
+                style={styles.smallSize}
               />
             </Item>
             <Item floatingLabel>
-              <Label>Password</Label>
+              <Label style={styles.smallSize}>Password</Label>
               <Input
                 value={this.state.password}
                 onChangeText={password => this.setState({ password })}
                 secureTextEntry={true}
                 autoCapitalize="none"
+                style={styles.smallSize}
               />
             </Item>
             <Body>
-              <Button
-                large
+              <MyButton
                 onPress={() => this.logIn()}
-                style={{ marginTop: 20 }}
-              >
-                <Icon name="person" />
-                <Text>Log In!</Text>
-              </Button>
+                props={"Go!"}
+                icon={"person"}
+              />
             </Body>
           </Form>
         </View>
@@ -320,9 +324,7 @@ export default class Profile extends Component {
     return (
       <Container style={styles.container} padder>
         <NavigationEvents onDidFocus={() => this.getToken()} />
-        <Header>
-          <Text>SLOTH</Text>
-        </Header>
+        <ShowHeader props={"Profile"} />
         {/* <Content style={{ marginTop: "2%" }}> */}
         <Content padder>
           {this.showSignUpForm(showSignUp, response)}

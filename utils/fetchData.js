@@ -1,6 +1,8 @@
 const fetchData = async (arg, method, headers, body) => {
-  const url = `https://2a04575f.ngrok.io/${arg}`;
-  // const url = `http://localhost:3000/${arg}`;
+  // const url = `https://58363ee5.ngrok.io/${arg}`;
+  // const url = `https://slothbackend.herokuapp.com/${arg}`;
+
+  const url = `http://localhost:3000/${arg}`;
 
   return await fetch(url, {
     method: method,

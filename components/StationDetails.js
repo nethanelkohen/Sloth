@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Container, Header, List, Text, Content } from "native-base";
+import { Container, List, Content } from "native-base";
 import store from "react-native-simple-store";
 import { NavigationEvents } from "react-navigation";
 import StatusUpdate from "../functional/StatusUpdate";
 import PostData from "../functional/PostData";
+import Headers from "../functional/Headers";
 import fetchData from "../utils/fetchData";
 import styles from "../styles/styles";
 
@@ -65,12 +66,9 @@ export default class StationDetails extends Component {
     return (
       <Container style={styles.container}>
         <NavigationEvents onDidFocus={() => this.getStore()} />
-        <Header>
-          <Text> Station: {station} </Text>
-        </Header>
+        <Headers props={`Station: ${station}`} />
         <Content>
           <StatusUpdate props={stationData} />
-          <Text style={{ fontSize: 20 }}>Last 5 posts</Text>
           <List>
             <PostData {...this.state} counter={this.counter} />
           </List>

@@ -9,7 +9,7 @@ export default ({ backEndRes }) => {
       <Card style={styles.card}>
         <CardItem>
           <Body>
-            <Text style={styles.error}>{backEndRes}</Text>
+            <Text style={styles.size}>{backEndRes}</Text>
           </Body>
         </CardItem>
       </Card>

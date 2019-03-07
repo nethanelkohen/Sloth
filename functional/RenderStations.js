@@ -1,12 +1,14 @@
 import React from "react";
 import { List, ListItem, Body, Right, Button, Text } from "native-base";
-import { StyleSheet } from "react-native";
+import styles from "../styles/styles";
 import checkStatus from "../utils/checkStatus";
 
 export default ({ stations, handlePress, homeStation }) => {
-  if (!stations) return null;
+  if (stations === "Network request failed" || stations.length == 0) {
+    return <Text>Unable to connect to API</Text>;
+  }
 
-  if (stations) {
+  if (stations.length > 0) {
     return stations.map(station => {
       let nycTime = new Date(station.updatedAt).toLocaleString("en-US", {
         timeZone: "America/New_York"
@@ -27,8 +29,8 @@ export default ({ stations, handlePress, homeStation }) => {
                   {station.station}
                 </Text>
               </Button>
-              <Text style={{ fontSize: 16 }} note>
-                last updated: {nycTime.toLocaleString()}
+              <Text note style={styles.smallSize} note>
+                {nycTime.toLocaleString()}
               </Text>
             </Body>
             <Right>
@@ -42,11 +44,3 @@ export default ({ stations, handlePress, homeStation }) => {
     });
   }
 };
-
-const styles = StyleSheet.create({
-  redBorder: {
-    borderRadius: 3,
-    borderWidth: 10,
-    borderColor: "#5b0654"
-  }
-});
