@@ -46,7 +46,7 @@ export default class TrainStatus extends Component {
     return (
       <Container style={styles.container}>
         <NavigationEvents onDidFocus={() => this.getUpdates()} />
-        <Headers props={"S L O T H"} />
+        <Headers props={"Overview"} />
         <Content>
           {stations.length > 0 ? (
             <RenderStations {...this.state} handlePress={this.handlePress} />

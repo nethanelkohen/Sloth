@@ -83,7 +83,7 @@ export default class Profile extends Component {
     });
   };
 
-  signUp = async arg => {
+  signUp = async () => {
     let { username, home_station } = this.state;
     if (username.length < 4) {
       return Alert.alert("Username must be at least 4 characters");
@@ -93,7 +93,15 @@ export default class Profile extends Component {
       return Alert.alert("Please choose a home station");
     }
 
-    arg
+    fetchData(
+      "user",
+      "post",
+      {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      JSON.stringify(this.state)
+    )
       .then(user => {
         store.save("userId", { userId: user.results.id });
         this.setState({ userId: user.results.id });
@@ -102,7 +110,7 @@ export default class Profile extends Component {
       // .then(argRes => Alert.alert(argRes.message))
       .catch(err => console.error(err));
 
-    // setTimeout(() => this.logIn(), 1500);
+    setTimeout(() => this.logIn(), 1000);
   };
 
   registerForPushNotificationsAsync = async () => {
@@ -112,7 +120,7 @@ export default class Profile extends Component {
 
     let token = await Notifications.getExpoPushTokenAsync();
 
-    await fetch(`https://2a04575f.ngrok.io/token/${this.state.userId}`, {
+    await fetch(`https://9bab4953.ngrok.io/token/${this.state.userId}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -150,7 +158,7 @@ export default class Profile extends Component {
         store.save("token", { token: userRes.token });
       }
     });
-    setTimeout(() => this.props.navigation.navigate("Status"), 1500);
+    setTimeout(() => this.props.navigation.navigate("Status"), 1000);
   };
 
   showProfileInfo = response => {
@@ -246,25 +254,16 @@ export default class Profile extends Component {
                 }
               >
                 <Picker.Item label="Never alert me" value="0" />
-                <Picker.Item label="Alert me daily at 8:30 AM" value="1" />
-                <Picker.Item label="Whenever there's a delay" value="2" />
+                {/* <Picker.Item label="Alert me daily at 8:30 AM" value="1" /> */}
+                <Picker.Item
+                  label="Whenever there's a delay at my home station"
+                  value="1"
+                />
               </Picker>
             </Item>
             <Body style={{ marginTop: "5%" }}>
               <MyButton
-                onPress={() =>
-                  this.signUp(
-                    fetchData(
-                      "user",
-                      "post",
-                      {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                      },
-                      JSON.stringify(this.state)
-                    )
-                  )
-                }
+                onPress={() => this.signUp()}
                 props={"Go!"}
                 icon={"person-add"}
               />
