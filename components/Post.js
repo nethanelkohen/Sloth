@@ -19,7 +19,7 @@ import styles from "../styles/styles";
 export default class SignUp extends Component {
   state = {
     station: undefined,
-    train: undefined,
+    direction: undefined,
     status_update: undefined,
     comments: null,
     photo: undefined,
@@ -35,7 +35,7 @@ export default class SignUp extends Component {
     const {
       station,
       status_update,
-      train,
+      direction,
       comments,
       updateConfirm
     } = this.state;
@@ -72,15 +72,15 @@ export default class SignUp extends Component {
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
-                placeholder="Which train?"
+                placeholder="Which direction?"
                 placeholderStyle={styles.smallSize}
                 itemTextStyle={styles.smallSize}
                 placeholderIconColor="#007aff"
-                selectedValue={train}
-                onValueChange={train => this.setState({ train })}
+                selectedValue={direction}
+                onValueChange={direction => this.setState({ direction })}
               >
-                <Picker.Item label="N" value="N" />
-                <Picker.Item label="W" value="W" />
+                <Picker.Item label="Manhattan" value="Manhattan" />
+                <Picker.Item label="Astoria" value="Astoria" />
               </Picker>
             </Item>
             <Item picker>
@@ -98,7 +98,7 @@ export default class SignUp extends Component {
               >
                 <Picker.Item label="not running" value="not running" />
                 <Picker.Item label="delayed" value="delayed" />
-                <Picker.Item label="smooth" value="smooth" />
+                <Picker.Item label="on-time" value="on-time" />
                 <Picker.Item label="crowded" value="crowded" />
                 <Picker.Item label="slow" value="slow" />
               </Picker>
@@ -114,10 +114,10 @@ export default class SignUp extends Component {
             <Body>
               <MyButton
                 onPress={() => {
-                  const { station, train, status_update } = this.state;
+                  const { station, direction, status_update } = this.state;
                   if (
                     station == undefined ||
-                    train == undefined ||
+                    direction == undefined ||
                     status_update == undefined
                   )
                     return Alert.alert(
@@ -135,6 +135,7 @@ export default class SignUp extends Component {
                       JSON.stringify(this.state)
                     )
                   );
+                  this.props.navigation.navigate("Status");
                 }}
                 props={"Update!"}
               />

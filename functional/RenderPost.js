@@ -10,7 +10,7 @@ export default ({ props }) => {
   return (
     <Body>
       <Text style={[styles.mediumSize, styles.card]}>
-        Update: {props.train} {props.status_update} at {props.station}
+        Update: {props.direction} bound {props.status_update} at {props.station}
       </Text>
     </Body>
   );

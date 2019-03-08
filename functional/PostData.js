@@ -21,7 +21,7 @@ export default ({ postData, counter }) => {
               {post.comments ? `comments: ${post.comments}` : null}
             </Text>
             <Text style={styles.smallSize} note>
-              {post.train} train
+              {post.direction} bound
             </Text>
             <Text note style={checkStatus(post.status_update)}>
               {post.status_update}
@@ -40,10 +40,10 @@ export default ({ postData, counter }) => {
                 justifyContent: "center"
               }}
             >
-              <Button primary onPress={() => counter("increment", post.id)}>
+              <Button light onPress={() => counter("increment", post.id)}>
                 <Text>⬆️</Text>
               </Button>
-              <Button primary onPress={() => counter("decrement", post.id)}>
+              <Button light onPress={() => counter("decrement", post.id)}>
                 <Text>⬇️</Text>
               </Button>
             </Body>

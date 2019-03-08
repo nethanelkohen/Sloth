@@ -20,6 +20,7 @@ import styles from "../styles/styles";
 import ProfileRes from "../functional/ProfileRes";
 import ShowHeader from "../functional/Headers";
 import MyButton from "../functional/MyButton";
+import { setLightEstimationEnabled } from "expo/build/AR";
 
 export default class Profile extends Component {
   state = {
@@ -120,7 +121,10 @@ export default class Profile extends Component {
 
     let token = await Notifications.getExpoPushTokenAsync();
 
-    await fetch(`https://9bab4953.ngrok.io/token/${this.state.userId}`, {
+    // const url = `https://slothbackend.herokuapp.com/${this.state.userId}`;
+    const url = `https://9eab19e3.ngrok.io/token/${this.state.userId}`;
+
+    await fetch(url, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -147,18 +151,23 @@ export default class Profile extends Component {
       },
       JSON.stringify(this.state)
     ).then(userRes => {
-      this.setState({ backEndRes: userRes.message });
+      if (userRes.message == "Username not found") {
+        return this.setState({ backEndRes: userRes.message });
+      } else {
+        this.setState({ backEndRes: userRes.message });
 
-      if (userRes.user) {
-        store.save("homeStation", { homeStation: userRes.user.home_station });
-        store.save("userId", { userId: userRes.user.id });
-      }
+        if (userRes.user) {
+          store.save("homeStation", { homeStation: userRes.user.home_station });
+          store.save("userId", { userId: userRes.user.id });
+        }
 
-      if (userRes.token) {
-        store.save("token", { token: userRes.token });
+        if (userRes.token) {
+          store.save("token", { token: userRes.token });
+        }
+
+        setTimeout(() => this.props.navigation.navigate("Status"), 1000);
       }
     });
-    setTimeout(() => this.props.navigation.navigate("Status"), 1000);
   };
 
   showProfileInfo = response => {

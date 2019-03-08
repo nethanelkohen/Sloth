@@ -7,7 +7,7 @@
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/sloth-logo.png",
     "splash": {
       "image": "./assets/sloth-logo.png",
       "resizeMode": "contain",
@@ -18,7 +18,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nate.sloth"
     }
   }
 }
