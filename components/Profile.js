@@ -103,10 +103,10 @@ export default class Profile extends Component {
       },
       JSON.stringify(this.state)
     )
-      .then(user => {
-        store.save("userId", { userId: user.results.id });
-        this.setState({ userId: user.results.id });
-        this.registerForPushNotificationsAsync();
+      .then(async user => {
+        await store.save("userId", { userId: user.results.id });
+        await this.setState({ userId: user.results.id });
+        await this.registerForPushNotificationsAsync();
       })
       // .then(argRes => Alert.alert(argRes.message))
       .catch(err => console.error(err));
@@ -115,14 +115,29 @@ export default class Profile extends Component {
   };
 
   registerForPushNotificationsAsync = async () => {
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
 
-    if (status !== "granted") return;
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== "granted") {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
 
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== "granted") {
+      alert("here is alert:" + finalStatus, existingStatus);
+      return;
+    }
     let token = await Notifications.getExpoPushTokenAsync();
 
-    // const url = `https://slothbackend.herokuapp.com/${this.state.userId}`;
-    const url = `https://9eab19e3.ngrok.io/token/${this.state.userId}`;
+    const url = `https://slothbackend.herokuapp.com/token/${this.state.userId}`;
+    // const url = `https://2c5e7991.ngrok.io/token/${this.state.userId}`;
 
     await fetch(url, {
       method: "POST",

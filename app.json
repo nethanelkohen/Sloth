@@ -19,7 +19,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.nw.sloth"
+      "bundleIdentifier": "com.nk.sloth"
     }
   }
 }

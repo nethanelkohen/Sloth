@@ -14,3 +14,8 @@ npm-debug.*
 .env.test.local
 .env.production.local
 .vscode/
+
+Sloth-app_apns_key.p8
+Sloth-app_dist_cert_private.key
+Sloth-app_dist.p12
+Sloth-app.mobileprovision
