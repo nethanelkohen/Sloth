@@ -16,7 +16,7 @@ export default class TrainStatus extends Component {
 
   getUpdates = () => {
     fetchData("mta/status", "get").then(res => {
-      res.slice(8, 9).map(trains => {
+      res.result.slice(8, 9).map(trains => {
         this.setState({ mtaResponse: trains });
       });
     });
