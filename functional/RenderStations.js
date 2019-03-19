@@ -3,7 +3,15 @@ import { List, ListItem, Body, Right, Button, Text } from "native-base";
 import styles from "../styles/styles";
 import checkStatus from "../utils/checkStatus";
 
-export default ({ stations, handlePress, homeStation }) => {
+export default ({ stations, handlePress, homeStation, loading }) => {
+  if (loading) {
+    return (
+      <Body>
+        <Text style={[styles.loading, styles.size]}>LOADING...</Text>
+      </Body>
+    );
+  }
+
   if (stations === "Network request failed" || stations.length == 0) {
     return <Text>Unable to connect to API</Text>;
   }

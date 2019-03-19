@@ -10,12 +10,13 @@ import styles from "../styles/styles";
 export default class TrainStatus extends Component {
   state = {
     stations: [],
-    homeStation: ""
+    homeStation: "",
+    loading: true
   };
 
   getUpdates = () => {
     fetchData("station/all", "get").then(stations => {
-      this.setState({ stations: stations.message });
+      this.setState({ loading: false, stations: stations.message });
     });
 
     store.get("homeStation").then(res => {

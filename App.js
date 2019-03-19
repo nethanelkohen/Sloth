@@ -40,17 +40,17 @@ const TabNavigator = createBottomTabNavigator({
       tabBarIcon: () => <Icon name="subway" size={25} color="#900" />
     }
   },
-  Mta: {
-    screen: Mta,
+  // Mta: {
+  //   screen: Mta,
 
-    navigationOptions: {
-      tabBarLabel: "MTA",
-      tabBarOptions: {
-        showIcon: true
-      },
-      tabBarIcon: () => <Icon name="warning" size={25} color="#900" />
-    }
-  },
+  //   navigationOptions: {
+  //     tabBarLabel: "MTA",
+  //     tabBarOptions: {
+  //       showIcon: true
+  //     },
+  //     tabBarIcon: () => <Icon name="warning" size={25} color="#900" />
+  //   }
+  // },
   Profile: {
     screen: Profile,
     navigationOptions: {
