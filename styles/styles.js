@@ -1,17 +1,17 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 import {
   sanFranciscoSpacing,
   iOSColors,
   sanFranciscoWeights
-} from "react-native-typography";
+} from 'react-native-typography';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: "#f2f2f2"
+    backgroundColor: '#f2f2f2'
   },
   size: {
     ...sanFranciscoWeights.heavy,
-    fontSize: 24,
+    fontSize: 20,
     letterSpacing: sanFranciscoSpacing(24)
   },
   smallSize: {
@@ -31,31 +31,31 @@ export default StyleSheet.create({
   redBorder: {
     borderRadius: 3,
     borderWidth: 10,
-    borderColor: "#5b0654"
+    borderColor: '#5b0654'
   },
   card: {
-    marginTop: "10%"
+    marginTop: '10%'
   },
   error: {
-    color: "red",
+    color: 'red',
     fontSize: 20
   },
   webview: {
     flex: 1,
-    backgroundColor: "#f2f2f2",
-    marginTop: "5%"
+    backgroundColor: '#f2f2f2',
+    marginTop: '5%'
   },
   nothing: {
     flex: 1,
-    backgroundColor: "#f2f2f2",
-    alignItems: "center",
-    justifyContent: "center"
+    backgroundColor: '#f2f2f2',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   loading: {
     flex: 1,
-    backgroundColor: "#f2f2f2",
-    marginTop: "5%",
-    alignItems: "center",
-    justifyContent: "center"
+    backgroundColor: '#f2f2f2',
+    marginTop: '5%',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });

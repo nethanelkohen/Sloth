@@ -1,7 +1,7 @@
-import React from "react";
-import { List, ListItem, Body, Right, Button, Text } from "native-base";
-import styles from "../styles/styles";
-import checkStatus from "../utils/checkStatus";
+import React from 'react';
+import { List, ListItem, Body, Right, Button, Text } from 'native-base';
+import styles from '../styles/styles';
+import checkStatus from '../utils/checkStatus';
 
 export default ({ stations, handlePress, homeStation, loading }) => {
   if (loading) {
@@ -12,14 +12,14 @@ export default ({ stations, handlePress, homeStation, loading }) => {
     );
   }
 
-  if (stations === "Network request failed" || stations.length == 0) {
+  if (stations === 'Network request failed' || stations.length == 0) {
     return <Text>Unable to connect to API</Text>;
   }
 
   if (stations.length > 0) {
     return stations.map(station => {
-      let nycTime = new Date(station.updatedAt).toLocaleString("en-US", {
-        timeZone: "America/New_York"
+      let nycTime = new Date(station.updatedAt).toLocaleString('en-US', {
+        timeZone: 'America/New_York'
       });
 
       checkHome = () => {
@@ -33,7 +33,9 @@ export default ({ stations, handlePress, homeStation, loading }) => {
           <ListItem avatar>
             <Body>
               <Button transparent onPress={() => handlePress(station.station)}>
-                <Text style={checkStatus(station.status)}>
+                <Text
+                  style={[checkStatus(station.status), { marginLeft: '-8%' }]}
+                >
                   {station.station}
                 </Text>
               </Button>
@@ -42,7 +44,10 @@ export default ({ stations, handlePress, homeStation, loading }) => {
               </Text>
             </Body>
             <Right>
-              <Text note style={checkStatus(station.status)}>
+              <Text
+                note
+                style={[checkStatus(station.status), { marginTop: '9%' }]}
+              >
                 {station.status}
               </Text>
             </Right>
